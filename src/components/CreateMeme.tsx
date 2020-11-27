@@ -17,8 +17,6 @@ export default class CreateMeme extends React.Component {
     private handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
-        console.log("TES");
-
         const data = new FormData();
         data.append("template", this.fileInput.current.files[0])
         

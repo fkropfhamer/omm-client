@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom';
 import './App.css';
 import CreateMeme from './components/CreateMeme';
+import EditMeme from './components/EditMeme';
 import Home from './components/Home';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <Route path="/create-meme">
           <CreateMeme />
         </Route>
+        <Route path="/edit-meme/:id" render={(props) => <EditMeme {...props}/>}/>
         <Route path="/">
           <Home />
         </Route>
