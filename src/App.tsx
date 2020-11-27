@@ -1,19 +1,26 @@
 import React from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from 'react-router-dom';
 import './App.css';
-import {apiEndpointUrl} from './constants'
+import CreateMeme from './components/CreateMeme';
+import Home from './components/Home';
 
 function App() {
-  function click() {
-    console.log('dfas')
-    fetch(apiEndpointUrl).then(r => r.json()).then(j => console.log(j));
-  }
-
-
   return (
-    <div className="App">
-      <button onClick={() => click()} >Click me!</button>
-    </div>
-  );
+    <Router>
+      <Switch>
+        <Route path="/create-meme">
+          <CreateMeme />
+        </Route>
+        <Route path="/">
+          <Home />
+        </Route>
+      </Switch>
+    </Router>
+  )
 }
 
 export default App;
