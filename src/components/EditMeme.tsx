@@ -13,6 +13,7 @@ interface State {
 export default class EditMeme extends React.Component<RouteComponentProps<RouteParams>, State> {
     private canvas: React.RefObject<any>;
     private img?: HTMLImageElement;
+    private imgUrl = "";
 
     constructor(props: RouteComponentProps<RouteParams>) {
         super(props);
@@ -28,6 +29,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         this.drawMeme = this.drawMeme.bind(this);
         this.onBottomTextChange = this.onBottomTextChange.bind(this);
         this.onTopTextChange = this.onTopTextChange.bind(this);
+        this.onCreateOnServer = this.onCreateOnServer.bind(this);
     }
 
     async componentDidMount() {
@@ -38,6 +40,8 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
 
         const res = await fetch(apiEndpointUrl + 'template/?id=' + id);
         const json = await res.json();
+
+        this.imgUrl = json.data.template.url;
         
         const img = new Image();
         img.src = json.data.template.url;
@@ -77,6 +81,28 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         this.setState({topText: event.target.value}, () => this.drawMeme())
     }
 
+    private async onCreateOnServer(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+        const res = await fetch(apiEndpointUrl + 'meme', {
+            method: 'POST',
+            body: JSON.stringify({
+                url: this.imgUrl,
+                bottom: this.state.bottomText,
+                top: this.state.topText,
+                name: this.state.name,
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            }
+        })
+
+        const json = await res.json();
+
+        console.log(json)
+
+        this.props.history.push('/show-meme/' + json.data.id)
+    }
+
     render() {
         return (
             <div> 
@@ -87,6 +113,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
                 <input type="text" onChange={this.onTopTextChange}></input>
                 name
                 <input type="text" onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.setState({name: event.target.value})}></input>
+                <button onClick={this.onCreateOnServer}>Create on Server</button>
             </div>
         )
     }
