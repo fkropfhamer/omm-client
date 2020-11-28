@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { apiEndpointUrl } from "../constants";
+import Meme from "./Meme";
 
 export default function MemeSlideShow() {
     const [memes, setMemes] = useState([] as any[]);
@@ -39,8 +40,7 @@ export default function MemeSlideShow() {
     return <div>
         {currentMeme ?
         <div> 
-            <h1>{currentMeme.name}</h1>
-            <img src={currentMeme.url} alt="meme"></img>
+            <Meme meme={currentMeme} />
             <button onClick={onPrev}>pref</button>
             <button onClick={onNext}>next</button> 
         </div>: 'loading'}

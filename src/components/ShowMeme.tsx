@@ -1,6 +1,7 @@
 import React from "react"
 import { RouteComponentProps } from "react-router-dom";
 import { apiEndpointUrl } from "../constants";
+import Meme from "./Meme";
 
 interface RouteParams {id: string}
 
@@ -33,10 +34,12 @@ export default class ShowMeme extends React.Component<RouteComponentProps<RouteP
     }
 
     render() {
+        const meme = {url: this.state.imgUrl, name: this.state.imgName};
+
+
         return (
             <div> 
-                <h1>{this.state.imgName ? this.state.imgName : 'Loading'}</h1>
-                <img src={this.state.imgUrl} alt='meme'></img>
+                {this.state.imgName ? <Meme meme={meme}/> : 'Loading'}
             </div>
         )
     }

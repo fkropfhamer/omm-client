@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { apiEndpointUrl } from "../constants";
+import Meme from "./Meme";
 
 export default function MemeOverview() {
     const [memes, setMemes] = useState([] as any[]);
@@ -18,11 +19,8 @@ export default function MemeOverview() {
     }, [])
 
     return <div>
-        {memes.map((meme) => {
-            return <div>
-                <h1>{meme.name}</h1>
-                <img src={meme.url} alt='meme'></img>
-            </div>
+        {memes.map((meme, i) => {
+            return <Meme meme={meme} key={i}/>
         })}
     </div>
 }
