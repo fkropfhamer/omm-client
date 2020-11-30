@@ -8,6 +8,10 @@ interface State {
     name: string,
     bottomText: string,
     topText: string,
+    topX: number,
+    topY: number,
+    bottomX: number,
+    bottomY: number,
 }
 
 export default class EditMeme extends React.Component<RouteComponentProps<RouteParams>, State> {
@@ -23,13 +27,21 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         this.state = {
             name: "",
             bottomText: "",
-            topText:"",
+            topText: "",
+            topX: 250,
+            topY: 50,
+            bottomX: 250,
+            bottomY: 450,
         }
 
         this.drawMeme = this.drawMeme.bind(this);
         this.onBottomTextChange = this.onBottomTextChange.bind(this);
         this.onTopTextChange = this.onTopTextChange.bind(this);
         this.onCreateOnServer = this.onCreateOnServer.bind(this);
+        this.onTopXChange = this.onTopXChange.bind(this);
+        this.onTopYChange = this.onTopYChange.bind(this);
+        this.onBottomYChange = this.onBottomYChange.bind(this);
+        this.onBottomXChange = this.onBottomXChange.bind(this);
     }
 
     async componentDidMount() {
@@ -65,8 +77,8 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         ctx.drawImage(this.img, 0, 0, canvas.width, canvas.height)
-        ctx.fillText(this.state.bottomText, 150, 50);
-        ctx.fillText(this.state.topText, 150, 450);
+        ctx.fillText(this.state.bottomText, this.state.bottomX, this.state.bottomY);
+        ctx.fillText(this.state.topText, this.state.topX, this.state.topY);
     }
 
     private onBottomTextChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -79,6 +91,30 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         event.preventDefault();
 
         this.setState({topText: event.target.value}, () => this.drawMeme())
+    }
+
+    private onBottomXChange(event: React.ChangeEvent<HTMLInputElement>) {
+        event.preventDefault();
+
+        this.setState({bottomX: parseInt(event.target.value)}, () => this.drawMeme());
+    }
+
+    private onBottomYChange(event: React.ChangeEvent<HTMLInputElement>) {
+        event.preventDefault();
+
+        this.setState({bottomY: parseInt(event.target.value)}, () => this.drawMeme());
+    }
+
+    private onTopXChange(event: React.ChangeEvent<HTMLInputElement>) {
+        event.preventDefault();
+
+        this.setState({topX: parseInt(event.target.value)}, () => this.drawMeme())
+    }
+
+    private onTopYChange(event: React.ChangeEvent<HTMLInputElement>) {
+        event.preventDefault();
+
+        this.setState({topY: parseInt(event.target.value)}, () => this.drawMeme())
     }
 
     private async onCreateOnServer(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
@@ -108,11 +144,19 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
             <div> 
                 <canvas width={500} height={500} ref={this.canvas}></canvas>
                 top
-                <input type="text" onChange={this.onBottomTextChange}></input>
-                bottom
                 <input type="text" onChange={this.onTopTextChange}></input>
+                bottom
+                <input type="text" onChange={this.onBottomTextChange}></input>
                 name
                 <input type="text" onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.setState({name: event.target.value})}></input>
+                topX
+                <input type="number" value={this.state.topX} onChange={this.onTopXChange}></input>
+                topY
+                <input type="number" value={this.state.topY} onChange={this.onTopYChange}></input>
+                bottomX
+                <input type="number" value={this.state.bottomX} onChange={this.onBottomXChange}></input>
+                bottomY
+                <input type="number" value={this.state.bottomY} onChange={this.onBottomYChange}></input>
                 <button onClick={this.onCreateOnServer}>Create on Server</button>
             </div>
         )
