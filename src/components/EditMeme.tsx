@@ -42,6 +42,8 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         this.onTopYChange = this.onTopYChange.bind(this);
         this.onBottomYChange = this.onBottomYChange.bind(this);
         this.onBottomXChange = this.onBottomXChange.bind(this);
+        this.downloadPNG = this.downloadPNG.bind(this);
+        this.onCreateLocally = this.onCreateLocally.bind(this);
     }
 
     async componentDidMount() {
@@ -56,6 +58,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         this.imgUrl = json.data.template.url;
         
         const img = new Image();
+        img.crossOrigin = "anonymous";
         img.src = json.data.template.url;
 
         console.log(json.data.template.url)
@@ -139,6 +142,28 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         this.props.history.push('/show-meme/' + json.data.id)
     }
 
+    private downloadPNG(filename = 'canvas.png') {
+        const dataURL = this.canvas.current.toDataURL('image/png');
+        EditMeme.downloadURI(dataURL, filename);
+    }
+
+    private static downloadURI(uri: string, name: string) {
+        const link = document.createElement('a');
+        link.download = name;
+        link.href = uri;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    private onCreateLocally(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+        if (this.state.name !== '') {
+            this.downloadPNG(this.state.name + '.png')
+        }
+
+        this.downloadPNG();
+    }
+
     render() {
         return (
             <div> 
@@ -158,6 +183,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
                 bottomY
                 <input type="number" value={this.state.bottomY} onChange={this.onBottomYChange}></input>
                 <button onClick={this.onCreateOnServer}>Create on Server</button>
+                <button onClick={this.onCreateLocally}>Create locally and download</button>
             </div>
         )
     }
