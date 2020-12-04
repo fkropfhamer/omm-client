@@ -1,14 +1,17 @@
 import React from "react";
+import { RouteComponentProps } from "react-router-dom";
 import { apiEndpointUrl } from "../constants";
 
-interface Props {
+interface State {
 
 }
 
-export default class CreateMeme extends React.Component {
+
+
+export default class CreateMeme extends React.Component<RouteComponentProps, State> {
     private fileInput: React.RefObject<any>;
 
-    constructor(props: Props) {
+    constructor(props: RouteComponentProps) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.fileInput = React.createRef();
@@ -23,7 +26,13 @@ export default class CreateMeme extends React.Component {
         fetch(apiEndpointUrl + 'template', {
             method: "POST",
             body: data
-        }).then(res => res.json()).then(json => console.log(json)).catch(err => console.log(err));
+        })
+        .then(res => res.json())
+        .then(json => {
+            console.log(json);
+            this.props.history.push('/edit-meme/' + json.data.id)
+        })
+        .catch(err => console.log(err));
     }
 
     render() {

@@ -16,9 +16,7 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route path="/create-meme">
-          <CreateMeme />
-        </Route>
+        <Route path="/create-meme" render={(props) => <CreateMeme {...props} />}/>
         <Route path="/meme-slideshow"><MemeSlideShow/></Route>
         <Route path="/meme-overview"><MemeOverview/></Route>
         <Route path="/edit-meme/:id" render={(props) => <EditMeme {...props}/>}/>

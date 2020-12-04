@@ -8,6 +8,7 @@ interface RouteParams {id: string}
 interface State {
     imgUrl: string
     imgName: string
+    isLoading: boolean
 }
 
 export default class ShowMeme extends React.Component<RouteComponentProps<RouteParams>, State> {
@@ -17,6 +18,7 @@ export default class ShowMeme extends React.Component<RouteComponentProps<RouteP
         this.state = {
             imgUrl: '',
             imgName: '',
+            isLoading: true,
         }
     }
 
@@ -28,6 +30,7 @@ export default class ShowMeme extends React.Component<RouteComponentProps<RouteP
         const json = await res.json();
 
         this.setState({
+            isLoading: false,
             imgUrl: json.data.meme.url,
             imgName: json.data.meme.name,
         })
@@ -39,7 +42,7 @@ export default class ShowMeme extends React.Component<RouteComponentProps<RouteP
 
         return (
             <div> 
-                {this.state.imgName ? <Meme meme={meme}/> : 'Loading'}
+                {!this.state.isLoading ? <Meme meme={meme}/> : 'Loading'}
             </div>
         )
     }
