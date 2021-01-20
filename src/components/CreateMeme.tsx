@@ -1,6 +1,7 @@
 import React from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { apiEndpointUrl } from "../constants";
+import DrawTemplate from "./DrawTemplate";
 
 interface State {
     urlInput: string;
@@ -70,6 +71,7 @@ export default class CreateMeme extends React.Component<RouteComponentProps, Sta
                     <input type="text" value={this.state.urlInput} onChange={this.changeInputUrl}></input>
                     <button type="submit">Screenshot</button>
                 </form>
+                <DrawTemplate />
             </div>
         );
     }
