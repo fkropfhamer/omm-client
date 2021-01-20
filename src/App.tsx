@@ -8,6 +8,7 @@ import './App.css';
 import CreateMeme from './components/CreateMeme';
 import EditMeme from './components/EditMeme';
 import Home from './components/Home';
+import Login from './components/Login';
 import MemeOverview from './components/MemeOverview';
 import MemeSlideShow from './components/MemeSlideShow';
 import ShowMeme from './components/ShowMeme';
@@ -23,6 +24,8 @@ function App() {
         <Route path="/edit-meme/:id" render={(props) => <EditMeme {...props}/>}/>
         <Route path="/show-meme/:id" render={(props) => <ShowMeme {...props}/>}/>
         <Route path="/show-template/:id" render={(props) => <ShowTemplate {...props} />} />
+        <Route path="/login"><Login/></Route>
+        <Route path="/register"></Route>
         <Route path="/">
           <Home />
         </Route>
