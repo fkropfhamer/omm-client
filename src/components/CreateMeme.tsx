@@ -67,7 +67,7 @@ export default class CreateMeme extends React.Component<RouteComponentProps, Sta
                     <button type="submit">Submit</button>
                 </form>
                 <form onSubmit={this.handleUrlSubmit}>
-                    <input type="text" value={this.state.urlInput} onChange={this.changeInputUrl}></input>
+                    <input type="url" value={this.state.urlInput} onChange={this.changeInputUrl}></input>
                     <button type="submit">Screenshot</button>
                 </form>
             </div>
