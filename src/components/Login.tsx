@@ -5,6 +5,7 @@ import { apiEndpointUrl } from "../constants";
 export default function Login(props: RouteComponentProps) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [message, setMessage] = useState("");
 
     function isValid() {
         if (username === "") {
@@ -21,6 +22,7 @@ export default function Login(props: RouteComponentProps) {
     function onSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         console.log('logging in!')
+        setMessage("");
 
         if (isValid()) {
             const data = {
@@ -39,8 +41,11 @@ export default function Login(props: RouteComponentProps) {
             .then(json => {
                 console.log(json);
                 if (json.status) {
-                    props.history.push('/profile/' + json.token)
+                    props.history.push('/profile/' + json.token);
+                    return
                 }
+                
+                setMessage("Username or password is wrong!")
             })
             .catch(err => console.log(err));
         }
@@ -49,6 +54,7 @@ export default function Login(props: RouteComponentProps) {
     return (
         <div>
             <h1>Login</h1>
+            {message}
             <form onSubmit={onSubmit}>
                 username: <input type="text" onChange={(event: React.FormEvent<HTMLInputElement>) => setUsername(event.currentTarget.value)} value={username}/>
                 password: <input type="password" onChange={(event: React.FormEvent<HTMLInputElement>) => setPassword(event.currentTarget.value)} value={password}/>
