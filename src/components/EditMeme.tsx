@@ -18,6 +18,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
     private canvas: React.RefObject<any>;
     private img?: HTMLImageElement;
     private imgUrl = "";
+    
 
     constructor(props: RouteComponentProps<RouteParams>) {
         super(props);
@@ -44,6 +45,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         this.onBottomXChange = this.onBottomXChange.bind(this);
         this.downloadPNG = this.downloadPNG.bind(this);
         this.onCreateLocally = this.onCreateLocally.bind(this);
+        this.dictate = this.dictate.bind(this);
     }
 
     async componentDidMount() {
@@ -164,14 +166,38 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         this.downloadPNG();
     }
 
+    private dictate() {
+        window.SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.interimResults = true;
+        recognition.lang = 'en-US';
+
+        recognition.addEventListener('result', event => {
+            const transcript = event.results[0][0].transcript;
+                
+            // check if the voice input has ended
+            if(event.results[0].isFinal) {
+              console.log(transcript);
+              
+              // check if the input starts with 'hello'
+              if(transcript.indexOf('hello') === 0) {
+                console.log('You said hello to somebody.');
+              }
+            }
+          });
+        recognition.start();
+    }
+
     render() {
         return (
             <div> 
                 <canvas width={500} height={500} ref={this.canvas}></canvas>
                 top
                 <input type="text" onChange={this.onTopTextChange}></input>
+                <button onClick={this.dictate}>dictate top</button>
                 bottom
                 <input type="text" onChange={this.onBottomTextChange}></input>
+                <button>dictate bottom</button>
                 name
                 <input type="text" onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.setState({name: event.target.value})}></input>
                 topX
