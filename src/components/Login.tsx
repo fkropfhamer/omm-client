@@ -1,12 +1,49 @@
 import { useState } from "react";
+import { RouteComponentProps } from "react-router-dom";
+import { apiEndpointUrl } from "../constants";
 
-export default function Login() {
+export default function Login(props: RouteComponentProps) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+
+    function isValid() {
+        if (username === "") {
+            return false;
+        }
+
+        if (password === "") {
+            return false;
+        }
+
+        return true;
+    }
 
     function onSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         console.log('logging in!')
+
+        if (isValid()) {
+            const data = {
+                username,
+                password
+            }
+
+            fetch(apiEndpointUrl + 'user/authenticate', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json()) 
+            .then(json => {
+                console.log(json);
+                if (json.status) {
+                    props.history.push('/profile/' + json.token)
+                }
+            })
+            .catch(err => console.log(err));
+        }
     }
 
     return (
