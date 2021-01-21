@@ -6,7 +6,8 @@ interface RouteParams {jwt: string}
 
 
 interface User {
-    sub: string
+    id: string,
+    username: string
 }
 
 export default function Profile(props: RouteComponentProps<RouteParams>) {
@@ -42,7 +43,10 @@ export default function Profile(props: RouteComponentProps<RouteParams>) {
     if (user !== null) {
         return <div>
         <h1>Your Profile</h1>
-        your id: {user.sub}
+        <ul>
+            <li>your id: {user.id}</li>
+            <li>your username: {user.username}</li>
+        </ul>
         </div>
     }
 
