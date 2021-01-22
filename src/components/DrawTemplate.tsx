@@ -1,13 +1,14 @@
 import DrawOnCanvas from "draw-on-canvas-react";
 import { Component } from "react";
+import { RouteComponentProps } from "react-router-dom";
+import { apiEndpointUrl } from "../constants";
 
-interface Props {}
 
-export default class DrawTemplate extends Component<Props> {
+export default class DrawTemplate extends Component<RouteComponentProps> {
     private ref: DrawOnCanvas | null
     private setRef: (instance: DrawOnCanvas | null) => void
 
-    constructor(props: Props) {
+    constructor(props: RouteComponentProps) {
         super(props);
 
         this.ref = null;
@@ -25,6 +26,30 @@ export default class DrawTemplate extends Component<Props> {
         this.ref?.changeStrokeWeight(weight);
     }
 
+    save() {
+        //TODO: update draw-on-canvas package to expose canvas.toBlob()
+
+        (this.ref as any).draw.canvas.toBlob((blob: any) => {
+            const data = new FormData();
+            data.append("template", blob);
+
+            fetch(apiEndpointUrl + 'template', {
+                method: "POST",
+                body: data
+            })
+            .then(res => res.json())
+            .then(json => {
+                console.log(json);
+                this.props.history.push('/edit-meme/' + json.data.id)
+            })
+            .catch(err => console.log(err));
+        })
+    }
+
+    reset() {
+        this.ref?.reset();
+    }
+
     render() {
         return (
             <div>
@@ -36,6 +61,8 @@ export default class DrawTemplate extends Component<Props> {
                 <button onClick={() => this.changeStrokeColor('green')}>green</button>
                 <button onClick={() => this.changeStrokeColor('blue')}>blue</button>
                 <button onClick={() => this.changeStrokeColor('red')}>red</button>
+                <button onClick={() => this.reset()}>reset</button>
+                <button onClick={() => this.save()}>SAVE</button>
             </div>
         )
     }
