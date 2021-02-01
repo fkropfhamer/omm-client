@@ -4,6 +4,7 @@ import { apiEndpointUrl } from "../constants";
 import '../css/EditMeme.css'
 import TextEditor from "./TextEditor"
 
+
 interface RouteParams {id: string}
 
 interface State {
@@ -29,6 +30,8 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         super(props);
 
         this.canvas = React.createRef();
+        this.topTextEditor = React.createRef();
+        this.bottomTextEditor = React.createRef();
 
         this.state = {
             name: "",
@@ -78,11 +81,17 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(this.img, 0, 0, canvas.width, canvas.height)
 
-        ctx.font = this.topTextEditor.current?.state.size + "px Comic Sans MS";
-        ctx.fillText(this.topTextEditor.current?.state.text, this.topTextEditor.current?.state.x, this.topTextEditor.current?.state.y);
-        //ctx.fillStyle = "80px";
-        ctx.font = this.bottomTextEditor.current?.state.size + "px Comic Sans MS";
-        ctx.fillText(this.bottomTextEditor.current?.state.text, this.bottomTextEditor.current?.state.x, this.bottomTextEditor.current?.state.y);
+        const topTextEditorState = this.topTextEditor.current?.state;
+
+        ctx.font = topTextEditorState?.size + "px Comic Sans MS" + topTextEditorState?.isBold + topTextEditorState?.isItalic;
+        ctx.fillStyle = topTextEditorState?.hexColor;
+        ctx.fillText(topTextEditorState?.text, topTextEditorState?.x, topTextEditorState?.y);
+        
+        
+        const bottomTextEditorState = this.bottomTextEditor.current?.state;
+        ctx.font = bottomTextEditorState?.size + "px Comic Sans MS" + bottomTextEditorState?.isBold + bottomTextEditorState?.isItalic;
+        ctx.fillStyle = bottomTextEditorState?.hexColor;
+        ctx.fillText(bottomTextEditorState?.text, bottomTextEditorState?.x, bottomTextEditorState?.y);
     }
 
     private async onCreateOnServer(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
@@ -140,13 +149,11 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
                         <span><input id="name" type="text" onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.setState({name: event.target.value})}></input></span>
                         <br/>
 
-                        <TextEditor name="Top" x={250} y={50} ref={this.topTextEditor}></TextEditor>
-                        <TextEditor name="Bottom" x={250} y={450} ref={this.bottomTextEditor}></TextEditor>
-
-                        {/**
-                         * <TextEditor name="Text"></TextEditor>
-                         */}
+                        <TextEditor name="Top" x={250} y={50} ref={this.topTextEditor} drawMeme={this.drawMeme}></TextEditor>
+                        <TextEditor name="Bottom" x={250} y={450} ref={this.bottomTextEditor} drawMeme={this.drawMeme}></TextEditor>    
                         
+
+                        <br />
                         <button onClick={this.onCreateOnServer}>Create on Server</button>
                         <button onClick={this.onCreateLocally}>Create locally and download</button>
                     </div>

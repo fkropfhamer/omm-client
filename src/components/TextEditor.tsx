@@ -1,9 +1,12 @@
 import React, { Component } from "react";
+import { SketchPicker } from "react-color";
+import SketchColorPicker from '../js/SketchColorPicker';
 
 interface Props {
     name: string
     x: number,
-    y: number
+    y: number,
+    drawMeme: () => void
 }
 interface State {
     name: string,
@@ -11,13 +14,18 @@ interface State {
     x: number,
     y: number,
     size: string,
-    isBold: boolean
-    isItalic: boolean
+    isBold: string
+    isItalic: string
+    hexColor: string
 }
 
 export default class TextEditor extends Component<Props, State> {
-    constructor(props: State) {
+    private colorPicker: React.RefObject<any>;
+
+    constructor(props: Props) {
         super(props);
+
+        this.colorPicker = React.createRef();
 
         this.state = {
             name: this.props.name,
@@ -25,45 +33,72 @@ export default class TextEditor extends Component<Props, State> {
             x: this.props.x,
             y: this.props.y,
             size: "50",
-            isBold: false,
-            isItalic: false
+            isBold: "",
+            isItalic: "",
+            hexColor: "#F17013"
         }
 
         this.onTextChange = this.onTextChange.bind(this);
         this.onTextSizeChange = this.onTextSizeChange.bind(this);
         this.onXChange = this.onXChange.bind(this);
         this.onYChange = this.onYChange.bind(this);
+        this.onBoldClick = this.onBoldClick.bind(this);
+        this.onItalicClick = this.onItalicClick.bind(this);
+        this.onColorChange = this.onColorChange.bind(this);
     }
     
     private onTextChange(event: React.ChangeEvent<HTMLInputElement>) {
         event.preventDefault();
-
-        this.setState({text: event.target.value})
+        console.log(this.colorPicker.current.state.color)
+        this.setState({text: event.target.value}, () => this.props.drawMeme())
     }
 
     private onTextSizeChange(event: React.ChangeEvent<HTMLInputElement>) {
         event.preventDefault();
 
-        this.setState({size: event.target.value})
+        this.setState({size: event.target.value}, () => this.props.drawMeme())
     }
     
     private onXChange(event: React.ChangeEvent<HTMLInputElement>) {
         event.preventDefault();
 
-        this.setState({x: parseInt(event.target.value)})
+        this.setState({x: parseInt(event.target.value)},  () => this.props.drawMeme())
     }
 
     private onYChange(event: React.ChangeEvent<HTMLInputElement>) {
         event.preventDefault();
 
-        this.setState({y: parseInt(event.target.value)})
+        this.setState({y: parseInt(event.target.value)},  () => this.props.drawMeme())
+    }
+
+    private onBoldClick(event: React.MouseEvent<HTMLButtonElement>) {
+        event.preventDefault();
+
+        if (this.state.isBold === "bold")
+            this.setState({isBold: ""},  () => this.props.drawMeme())
+        else
+            this.setState({isBold: "bold"},  () => this.props.drawMeme())
+    }
+
+    private onItalicClick(event: React.MouseEvent<HTMLButtonElement>) {
+        event.preventDefault();
+
+        if (this.state.isItalic === "italic")
+            this.setState({isItalic: ""},  () => this.props.drawMeme())
+        else
+            this.setState({isItalic: "italic"},  () => this.props.drawMeme())
+    }
+
+    private onColorChange(newHexColor: string) {
+        this.setState({hexColor: newHexColor}, () => this.props.drawMeme())
     }
 
     render(){
         return (
             <div>
-                <button  onClick = { () => this.setState({isBold: !this.state.isBold})}>B</button>
-                <button  onClick = { () => this.setState({isItalic: !this.state.isItalic})}>I</button>
+                <button  onClick = {this.onBoldClick}>B</button>
+                <button  onClick = {this.onItalicClick}>I</button>
+                <SketchColorPicker ref={this.colorPicker} onColorChange={this.onColorChange}></SketchColorPicker>
 
                 <label htmlFor="text">{this.state.name}</label>
                 <span>
@@ -85,4 +120,6 @@ export default class TextEditor extends Component<Props, State> {
             </div>
         )
       }
+
+      
 }
