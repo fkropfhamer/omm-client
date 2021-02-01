@@ -1,6 +1,7 @@
 import React from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { apiEndpointUrl } from "../constants";
+import '../css/Display.css'
 
 interface State {
     urlInput: string;
@@ -60,7 +61,7 @@ export default class CreateMeme extends React.Component<RouteComponentProps, Sta
 
     render() {
         return (
-            <div>
+            <div className='displayWindow'>
                 <h1>Create meme</h1>
                 <form onSubmit={this.handleSubmit}>
                     <input type="file" ref={this.fileInput}></input>

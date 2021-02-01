@@ -10,12 +10,14 @@ import EditMeme from './components/EditMeme';
 import Home from './components/Home';
 import MemeOverview from './components/MemeOverview';
 import MemeSlideShow from './components/MemeSlideShow';
+import Navbar from './components/Navbar';
 import ShowMeme from './components/ShowMeme';
 import ShowTemplate from './components/ShowTemplate';
 
 function App() {
   return (
     <Router>
+      <Navbar/>
       <Switch>
         <Route path="/create-meme" render={(props) => <CreateMeme {...props} />}/>
         <Route path="/meme-slideshow"><MemeSlideShow/></Route>
@@ -24,7 +26,7 @@ function App() {
         <Route path="/show-meme/:id" render={(props) => <ShowMeme {...props}/>}/>
         <Route path="/show-template/:id" render={(props) => <ShowTemplate {...props} />} />
         <Route path="/">
-          <Home />
+          <Home/>
         </Route>
       </Switch>
     </Router>
