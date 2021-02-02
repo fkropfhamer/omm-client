@@ -40,7 +40,7 @@ export default class DrawTemplate extends Component<RouteComponentProps> {
             .then(res => res.json())
             .then(json => {
                 console.log(json);
-                this.props.history.push('/edit-meme/' + json.data.id)
+                this.props.history.push('/meme/edit/' + json.data.id)
             })
             .catch(err => console.log(err));
         })
@@ -53,7 +53,7 @@ export default class DrawTemplate extends Component<RouteComponentProps> {
     render() {
         return (
             <div>
-                <h1>Draw template</h1>
+                <h2>Draw template</h2>
                 <DrawOnCanvas width={500} height={500} strokeColor="black" strokeWeight={5} backgroundColor="grey" ref={this.setRef}/>
                 <button onClick={() => this.changeStrokeWeight(5)}>5</button>
                 <button onClick={() => this.changeStrokeWeight(10)}>10</button>
