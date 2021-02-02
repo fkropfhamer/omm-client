@@ -4,25 +4,25 @@ import { apiEndpointUrl } from "../constants";
 import '../css/EditMeme.css'
 import TextEditor from "./TextEditor"
 
+interface Text {
+    text: string,
+    x: number,
+    y: number,
+    size: string,
+    isBold: string
+    isItalic: string
+    hexColor: string
+}
 
 interface RouteParams {id: string}
 
 interface State {
     name: string,
-    bottomText: string,
-    topText: string,
-    topX: number,
-    topY: number,
-    bottomX: number,
-    bottomY: number,
-    topSize: string,
-    bottomSize: string
+    texts: Text[]
 }
 
 export default class EditMeme extends React.Component<RouteComponentProps<RouteParams>, State> {
     private canvas: React.RefObject<any>;
-    private topTextEditor!: React.RefObject<TextEditor>;
-    private bottomTextEditor!: React.RefObject<TextEditor>;
     private img?: HTMLImageElement;
     private imgUrl = "";
 
@@ -30,22 +30,33 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         super(props);
 
         this.canvas = React.createRef();
-        this.topTextEditor = React.createRef();
-        this.bottomTextEditor = React.createRef();
 
         this.state = {
             name: "",
-            bottomText: "",
-            topText: "",
-            topX: 250,
-            topY: 50,
-            bottomX: 250,
-            bottomY: 450,
-            topSize: "50",
-            bottomSize: "50"
+            texts: [
+                {
+                    text: "",
+                    x: 250,
+                    y: 50,
+                    size: "50",
+                    isBold: "",
+                    isItalic: "",
+                    hexColor: "#F17013"
+                },
+                {
+                    text: "",
+                    x: 250,
+                    y: 450,
+                    size: "50",
+                    isBold: "",
+                    isItalic: "",
+                    hexColor: "#F17013"
+                }
+            ]
         }
 
         this.drawMeme = this.drawMeme.bind(this);
+        this.addText = this.addText.bind(this);
     }
 
     async componentDidMount() {
@@ -77,23 +88,17 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         const ctx = this.canvas.current.getContext('2d');
 
         ctx.textAlign = "center";
-        console.log(this.state.topSize)
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(this.img, 0, 0, canvas.width, canvas.height)
 
-        const topTextEditorState = this.topTextEditor.current?.state;
-
-        ctx.font = topTextEditorState?.size + "px Comic Sans MS" + topTextEditorState?.isBold + topTextEditorState?.isItalic;
-        ctx.fillStyle = topTextEditorState?.hexColor;
-        ctx.fillText(topTextEditorState?.text, topTextEditorState?.x, topTextEditorState?.y);
-        
-        
-        const bottomTextEditorState = this.bottomTextEditor.current?.state;
-        ctx.font = bottomTextEditorState?.size + "px Comic Sans MS" + bottomTextEditorState?.isBold + bottomTextEditorState?.isItalic;
-        ctx.fillStyle = bottomTextEditorState?.hexColor;
-        ctx.fillText(bottomTextEditorState?.text, bottomTextEditorState?.x, bottomTextEditorState?.y);
+        this.state.texts.forEach(text => {
+            ctx.font = text.size + "px Comic Sans MS" + text.isBold + text.isItalic;
+            ctx.fillStyle = text.hexColor;
+            ctx.fillText(text.text, text.x, text.y);
+        });
     }
 
+    /*
     private async onCreateOnServer(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         const res = await fetch(apiEndpointUrl + 'meme', {
             method: 'POST',
@@ -115,6 +120,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
 
         this.props.history.push('/show-meme/' + json.data.id)
     }
+    */
 
     private downloadPNG(filename = 'canvas.png') {
         const dataURL = this.canvas.current.toDataURL('image/png');
@@ -138,6 +144,26 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         this.downloadPNG();
     }
 
+    private onTextChange(idx: number, text: Text) {
+        const newTexts = [...this.state.texts];
+        newTexts[idx] = text;
+        this.setState({texts: newTexts}, () => this.drawMeme());
+    }
+
+    private addText() {
+        const newText = {
+            text: "",
+            x: 250,
+            y: 250,
+            size: "50",
+            isBold: "",
+            isItalic: "",
+            hexColor: "#F17013"
+        };
+
+        this.setState({texts: [...this.state.texts, newText]})
+    }
+
     render() {
         return (
             <div>
@@ -149,12 +175,12 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
                         <span><input id="name" type="text" onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.setState({name: event.target.value})}></input></span>
                         <br/>
 
-                        <TextEditor name="Top" x={250} y={50} ref={this.topTextEditor} drawMeme={this.drawMeme}></TextEditor>
-                        <TextEditor name="Bottom" x={250} y={450} ref={this.bottomTextEditor} drawMeme={this.drawMeme}></TextEditor>    
+                        {this.state.texts.map((text, idx) => <TextEditor key={idx} text={text} onChange={(text) => {this.onTextChange(idx, text)}}/>)}
                         
-
                         <br />
-                        <button onClick={this.onCreateOnServer}>Create on Server</button>
+                        <button onClick={this.addText}>Add Text</button>
+                        <br />
+                        {/*<button onClick={this.onCreateOnServer}>Create on Server</button>*/}
                         <button onClick={this.onCreateLocally}>Create locally and download</button>
                     </div>
                 </div>
