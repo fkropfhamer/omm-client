@@ -1,0 +1,28 @@
+.displayWindow {
+  text-align: center;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #f2f2f2;
+  box-shadow: 2px 3px 3px #c8c8c8;
+  /*border:3px solid #000;*/
+}
+
+.allStates {
+  width: 100%;
+  height: 900px;
+  fill: rgb(188, 189, 220);
+  stroke: #fff;
+  stroke-width: 1.25px;
+  opacity: 0.85;
+}
+
+.allStates .active {
+  fill: rgba(0, 0, 0, 0.9);
+}
+
+.graticuleLine {
+  fill: none;
+  stroke: #777;
+  stroke-width: 0.5px;
+}

@@ -1,6 +1,6 @@
 import React from "react"
 import { RouteComponentProps } from "react-router-dom";
-import { apiEndpointUrl } from "../constants";
+import { apiEndpointUrl } from "../../constants";
 import Meme from "./Meme";
 
 interface RouteParams {id: string}
@@ -9,6 +9,7 @@ interface State {
     imgUrl: string
     imgName: string
     isLoading: boolean
+    imgViews: number
 }
 
 export default class ShowMeme extends React.Component<RouteComponentProps<RouteParams>, State> {
@@ -19,6 +20,7 @@ export default class ShowMeme extends React.Component<RouteComponentProps<RouteP
             imgUrl: '',
             imgName: '',
             isLoading: true,
+            imgViews: 0,
         }
     }
 
@@ -33,11 +35,12 @@ export default class ShowMeme extends React.Component<RouteComponentProps<RouteP
             isLoading: false,
             imgUrl: json.data.meme.url,
             imgName: json.data.meme.name,
+            imgViews: json.data.meme.views,
         })
     }
 
     render() {
-        const meme = {url: this.state.imgUrl, name: this.state.imgName};
+        const meme = {url: this.state.imgUrl, name: this.state.imgName, views: this.state.imgViews};
 
 
         return (
