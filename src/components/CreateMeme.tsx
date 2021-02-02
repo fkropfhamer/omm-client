@@ -32,7 +32,7 @@ export default class CreateMeme extends React.Component<RouteComponentProps, Sta
         .then(res => res.json())
         .then(json => {
             console.log(json);
-            this.props.history.push('/edit-meme/' + json.data.id)
+            this.props.history.push('/meme/edit/' + json.data.id)
         })
         .catch(err => console.log(err));
     }
@@ -50,7 +50,7 @@ export default class CreateMeme extends React.Component<RouteComponentProps, Sta
         .then(res => res.json()) 
         .then(json => {
             console.log(json);
-            this.props.history.push('/edit-meme/' + json.data.id)
+            this.props.history.push('/meme/edit/' + json.data.id)
         })
         .catch(err => console.log(err));
     }

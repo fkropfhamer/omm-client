@@ -37,6 +37,6 @@ export default function Template(props: Props) {
         <button onClick={()=> {
             download(url, 'template-' + id + '.png');
         }}>download</button>
-        <Link to={'/edit-meme/' + id}>create Meme from this template.</Link>
+        <Link to={'/meme/edit/' + id}>create Meme from this template.</Link>
     </div>
 }

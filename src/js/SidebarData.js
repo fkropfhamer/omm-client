@@ -13,13 +13,13 @@ export const SidebarData = [
     },
     {
         title: 'Slideshow',
-        path: '/meme-slideshow',
+        path: '/meme/slideshow',
         icon: <IoIcons.IoIosPaper/>,
         cName: 'nav-text'
     },
     {
         title: 'Overview',
-        path: '/meme-overview',
+        path: '/meme/overview',
         icon: <BsIcons.BsFillLayersFill/>,
         cName: 'nav-text'
     },

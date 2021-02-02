@@ -19,12 +19,12 @@ function App() {
     <Router>
       <Navbar/>
       <Switch>
-        <Route path="/create-meme" render={(props) => <CreateMeme {...props} />}/>
-        <Route path="/meme-slideshow"><MemeSlideShow/></Route>
-        <Route path="/meme-overview"><MemeOverview/></Route>
-        <Route path="/edit-meme/:id" render={(props) => <EditMeme {...props}/>}/>
-        <Route path="/show-meme/:id" render={(props) => <ShowMeme {...props}/>}/>
-        <Route path="/show-template/:id" render={(props) => <ShowTemplate {...props} />} />
+        <Route path="/meme/create" render={(props) => <CreateMeme {...props} />}/>
+        <Route path="/meme/slideshow"><MemeSlideShow/></Route>
+        <Route path="/meme/overview"><MemeOverview/></Route>
+        <Route path="/meme/edit/:id" render={(props) => <EditMeme {...props}/>}/>
+        <Route path="/meme/show/:id" render={(props) => <ShowMeme {...props}/>}/>
+        <Route path="/template/show/:id" render={(props) => <ShowTemplate {...props} />} />
         <Route path="/">
           <Home/>
         </Route>

@@ -119,7 +119,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
 
         console.log(json)
 
-        this.props.history.push('/show-meme/' + json.data.id)
+        this.props.history.push('/meme/show/' + json.data.id)
     }
 
     private downloadPNG(filename = 'canvas.png') {
