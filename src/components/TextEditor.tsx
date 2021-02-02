@@ -14,15 +14,12 @@ interface Text {
 interface Props {
     text: Text
     onChange: (text: Text) => void
+    onRemove: () => void
 }
 
 export default class TextEditor extends Component<Props> {
-    private colorPicker: React.RefObject<any>;
-
     constructor(props: Props) {
         super(props);
-
-        this.colorPicker = React.createRef();
 
         this.onTextChange = this.onTextChange.bind(this);
         this.onTextSizeChange = this.onTextSizeChange.bind(this);
@@ -35,7 +32,7 @@ export default class TextEditor extends Component<Props> {
     
     private onTextChange(event: React.ChangeEvent<HTMLInputElement>) {
         event.preventDefault();
-        console.log(this.colorPicker.current.state.color);
+
         const newText = Object.assign({}, this.props.text);
         newText.text = event.target.value;
         this.props.onChange(newText);
@@ -106,7 +103,7 @@ export default class TextEditor extends Component<Props> {
             <div>
                 <button  onClick = {this.onBoldClick}>B</button>
                 <button  onClick = {this.onItalicClick}>I</button>
-                <SketchColorPicker ref={this.colorPicker} onColorChange={this.onColorChange}></SketchColorPicker>
+                <SketchColorPicker onColorChange={this.onColorChange}></SketchColorPicker>
 
                 <label htmlFor="text">Text</label>
                 <span>
@@ -115,7 +112,7 @@ export default class TextEditor extends Component<Props> {
 
                 <label htmlFor="size">Size</label>
                 <span>
-                    <input id="size" type="text" onChange={this.onTextSizeChange} value={this.props.text.size}></input>
+                    <input id="size" type="number" onChange={this.onTextSizeChange} value={this.props.text.size}></input>
                 </span>
                 <br/>
 
@@ -125,6 +122,7 @@ export default class TextEditor extends Component<Props> {
                 <label htmlFor="y">Y</label>
                 <span><input id="y" type="number" value={this.props.text.y} onChange={this.onYChange}></input></span>
                 <br/>
+                <button onClick={this.props.onRemove}>Remove</button>
             </div>
         )
       }

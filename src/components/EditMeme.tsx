@@ -57,6 +57,8 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
 
         this.drawMeme = this.drawMeme.bind(this);
         this.addText = this.addText.bind(this);
+        this.onCreateOnServer = this.onCreateOnServer.bind(this);
+        this.downloadPNG = this.downloadPNG.bind(this);
     }
 
     async componentDidMount() {
@@ -98,14 +100,13 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         });
     }
 
-    /*
     private async onCreateOnServer(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         const res = await fetch(apiEndpointUrl + 'meme', {
             method: 'POST',
             body: JSON.stringify({
                 url: this.imgUrl,
-                bottom: this.state.bottomText,
-                top: this.state.topText,
+                bottom: this.state.texts[0].text,
+                top: this.state.texts[1].text,
                 name: this.state.name,
             }),
             headers: {
@@ -120,7 +121,6 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
 
         this.props.history.push('/show-meme/' + json.data.id)
     }
-    */
 
     private downloadPNG(filename = 'canvas.png') {
         const dataURL = this.canvas.current.toDataURL('image/png');
@@ -164,6 +164,11 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         this.setState({texts: [...this.state.texts, newText]})
     }
 
+    private RemoveText(index: number) {
+        const newTexts = this.state.texts.filter((_, idx) => index !== idx);
+        this.setState({ texts: newTexts}, () => this.drawMeme());
+    }
+
     render() {
         return (
             <div>
@@ -175,12 +180,14 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
                         <span><input id="name" type="text" onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.setState({name: event.target.value})}></input></span>
                         <br/>
 
-                        {this.state.texts.map((text, idx) => <TextEditor key={idx} text={text} onChange={(text) => {this.onTextChange(idx, text)}}/>)}
+                        {this.state.texts.map((text, idx) =>
+                            (<TextEditor key={idx} text={text} onChange={(text) => {this.onTextChange(idx, text)}} onRemove={() => this.RemoveText(idx) }/>)
+                        )}
                         
                         <br />
                         <button onClick={this.addText}>Add Text</button>
                         <br />
-                        {/*<button onClick={this.onCreateOnServer}>Create on Server</button>*/}
+                        {<button onClick={this.onCreateOnServer}>Create on Server</button>}
                         <button onClick={this.onCreateLocally}>Create locally and download</button>
                     </div>
                 </div>
