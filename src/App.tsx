@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom';
 import './App.css';
 import About from './components/About';
-import CreateMeme from './components/CreateMeme';
+import CreateTemplate from './components/CreateTemplate';
 import EditMeme from './components/EditMeme';
 import Home from './components/Home';
 import MemeOverview from './components/MemeOverview';
@@ -21,7 +21,7 @@ function App() {
       <Navbar/>
       <Switch>
         <Route path="/about"><About /></Route>
-        <Route path="/meme/create" render={(props) => <CreateMeme {...props} />}/>
+        <Route path="/template/create" render={(props) => <CreateTemplate {...props} />}/>
         <Route path="/meme/slideshow"><MemeSlideShow/></Route>
         <Route path="/meme/overview"><MemeOverview/></Route>
         <Route path="/meme/edit/:id" render={(props) => <EditMeme {...props}/>}/>

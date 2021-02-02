@@ -4533,6 +4533,18 @@ dotenv@8.2.0:
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.2.0.tgz#97e619259ada750eea3e4ea3e26bceea5424b16a"
   integrity sha512-8sJ78ElpbDJBHNeBzUbUVLsqKdccaa/BXF1uPTw3GrvQTBgrQrtObr2mUrE38vzYd8cEv+m/JBfDLioYcfXoaw==
 
+draw-on-canvas-react@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/draw-on-canvas-react/-/draw-on-canvas-react-0.1.0.tgz#c197187de5ae71e87c2110813c77e7abba068b11"
+  integrity sha512-W9pb54OU7hSTvDwtnEyxuu+RiTqqSbNyUAjAc6y1JXxi/DzvQy1OS6VjHQaXT951wdgZQ0FK0jctCMr72HylYA==
+  dependencies:
+    draw-on-canvas "^1.1.0"
+
+draw-on-canvas@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/draw-on-canvas/-/draw-on-canvas-1.1.0.tgz#5d8d657dcf9a2bd790518d4439a6daaff0c49fdd"
+  integrity sha512-HblMpnlmyGPZUbvVDyv4IK6OejKvRSvQ9H7dzCUJwIQvwzrooLZdfzftSBLB/ynY477MrZgGSIfe7bvwbNgnxw==
+
 duplexer@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/duplexer/-/duplexer-0.1.1.tgz#ace6ff808c1ce66b57d1ebf97977acb02334cfc1"
