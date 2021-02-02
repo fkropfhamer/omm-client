@@ -7,7 +7,7 @@ import UrlScreenshotTemplate from "./UrlScreenshotTemplate";
 
 
 
-export default class CreateMeme extends React.Component<RouteComponentProps> {
+export default class CreateTemplate extends React.Component<RouteComponentProps> {
     render() {
         return (
             <div className='displayWindow'>
