@@ -1,7 +1,8 @@
 import DrawOnCanvas from "draw-on-canvas-react";
-import { Component } from "react";
+import React, { Component } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { apiEndpointUrl } from "../../constants";
+import SketchColorPicker from "../../js/SketchColorPicker";
 
 
 export default class DrawTemplate extends Component<RouteComponentProps> {
@@ -16,6 +17,8 @@ export default class DrawTemplate extends Component<RouteComponentProps> {
         this.setRef = (instance: DrawOnCanvas | null) => {
             this.ref = instance;
         };
+
+        this.onColorChange = this.onColorChange.bind(this);
     }
 
     changeStrokeColor(color: string) {
@@ -50,17 +53,21 @@ export default class DrawTemplate extends Component<RouteComponentProps> {
         this.ref?.reset();
     }
 
+    private onColorChange(newHexColor: string) {
+        this.changeStrokeColor(newHexColor)
+    }
+
+    private onStrokeWeightChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        this.changeStrokeWeight(parseInt(event.target.value));
+    }
+
     render() {
         return (
             <div>
                 <h2>Draw template</h2>
                 <DrawOnCanvas width={500} height={500} strokeColor="black" strokeWeight={5} backgroundColor="grey" ref={this.setRef}/>
-                <button onClick={() => this.changeStrokeWeight(5)}>5</button>
-                <button onClick={() => this.changeStrokeWeight(10)}>10</button>
-                <button onClick={() => this.changeStrokeColor('black')}>black</button>
-                <button onClick={() => this.changeStrokeColor('green')}>green</button>
-                <button onClick={() => this.changeStrokeColor('blue')}>blue</button>
-                <button onClick={() => this.changeStrokeColor('red')}>red</button>
+                Strokeweight: <input type="number" onChange={this.onStrokeWeightChange} defaultValue={5}></input>
+                <SketchColorPicker onColorChange={this.onColorChange}></SketchColorPicker>
                 <button onClick={() => this.reset()}>reset</button>
                 <button onClick={() => this.save()}>SAVE</button>
             </div>
