@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { apiEndpointUrl } from "../constants";
+import { apiEndpointUrl } from "../../constants";
 import Meme from "./Meme";
 
 export default function MemeSlideShow() {

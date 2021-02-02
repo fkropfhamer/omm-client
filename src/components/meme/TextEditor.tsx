@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import SketchColorPicker from '../js/SketchColorPicker';
+import SketchColorPicker from '../../js/SketchColorPicker';
 
 interface Text {
     text: string,

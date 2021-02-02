@@ -1,6 +1,6 @@
 import React from "react"
 import { RouteComponentProps } from "react-router-dom";
-import { apiEndpointUrl } from "../constants";
+import { apiEndpointUrl } from "../../constants";
 import Template from "./Template";
 
 interface RouteParams {id: string}

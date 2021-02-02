@@ -6,14 +6,14 @@ import {
 } from 'react-router-dom';
 import './App.css';
 import About from './components/About';
-import CreateTemplate from './components/CreateTemplate';
-import EditMeme from './components/EditMeme';
+import CreateTemplate from './components/template/CreateTemplate';
+import EditMeme from './components/meme/EditMeme';
 import Home from './components/Home';
-import MemeOverview from './components/MemeOverview';
-import MemeSlideShow from './components/MemeSlideShow';
+import MemeOverview from './components/meme/MemeOverview';
+import MemeSlideShow from './components/meme/MemeSlideShow';
 import Navbar from './components/Navbar';
-import ShowMeme from './components/ShowMeme';
-import ShowTemplate from './components/ShowTemplate';
+import ShowMeme from './components/meme/ShowMeme';
+import ShowTemplate from './components/template/ShowTemplate';
 
 function App() {
   return (

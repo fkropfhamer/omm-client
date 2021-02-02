@@ -1,6 +1,6 @@
 import React from "react";
 import { RouteComponentProps } from "react-router-dom";
-import '../css/Display.css'
+import '../../css/Display.css'
 import DrawTemplate from "./DrawTemplate";
 import UploadTemplate from "./UploadTemplate";
 import UrlScreenshotTemplate from "./UrlScreenshotTemplate";

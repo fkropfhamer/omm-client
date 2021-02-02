@@ -1,7 +1,7 @@
 import React from "react"
 import { RouteComponentProps } from "react-router-dom";
-import { apiEndpointUrl } from "../constants";
-import '../css/EditMeme.css'
+import { apiEndpointUrl } from "../../constants";
+import '../../css/EditMeme.css'
 import TextEditor from "./TextEditor"
 
 interface Text {

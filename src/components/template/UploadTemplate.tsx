@@ -1,7 +1,7 @@
 import React from "react";
 import { RouteComponentProps } from "react-router-dom";
-import { apiEndpointUrl } from "../constants";
-import '../css/Display.css'
+import { apiEndpointUrl } from "../../constants";
+import '../../css/Display.css'
 
 
 export default class UploadTemplate extends React.Component<RouteComponentProps> {

@@ -1,7 +1,7 @@
 import DrawOnCanvas from "draw-on-canvas-react";
 import { Component } from "react";
 import { RouteComponentProps } from "react-router-dom";
-import { apiEndpointUrl } from "../constants";
+import { apiEndpointUrl } from "../../constants";
 
 
 export default class DrawTemplate extends Component<RouteComponentProps> {
