@@ -1,17 +1,24 @@
 import React from "react"
 import { RouteComponentProps } from "react-router-dom";
 import { apiEndpointUrl } from "../constants";
+import '../css/EditMeme.css'
+import TextEditor from "./TextEditor"
+
+interface Text {
+    text: string,
+    x: number,
+    y: number,
+    size: string,
+    isBold: string
+    isItalic: string
+    hexColor: string
+}
 
 interface RouteParams {id: string}
 
 interface State {
     name: string,
-    bottomText: string,
-    topText: string,
-    topX: number,
-    topY: number,
-    bottomX: number,
-    bottomY: number,
+    texts: Text[]
 }
 
 export default class EditMeme extends React.Component<RouteComponentProps<RouteParams>, State> {
@@ -26,24 +33,32 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
 
         this.state = {
             name: "",
-            bottomText: "",
-            topText: "",
-            topX: 250,
-            topY: 50,
-            bottomX: 250,
-            bottomY: 450,
+            texts: [
+                {
+                    text: "",
+                    x: 250,
+                    y: 50,
+                    size: "50",
+                    isBold: "",
+                    isItalic: "",
+                    hexColor: "#F17013"
+                },
+                {
+                    text: "",
+                    x: 250,
+                    y: 450,
+                    size: "50",
+                    isBold: "",
+                    isItalic: "",
+                    hexColor: "#F17013"
+                }
+            ]
         }
 
         this.drawMeme = this.drawMeme.bind(this);
-        this.onBottomTextChange = this.onBottomTextChange.bind(this);
-        this.onTopTextChange = this.onTopTextChange.bind(this);
+        this.addText = this.addText.bind(this);
         this.onCreateOnServer = this.onCreateOnServer.bind(this);
-        this.onTopXChange = this.onTopXChange.bind(this);
-        this.onTopYChange = this.onTopYChange.bind(this);
-        this.onBottomYChange = this.onBottomYChange.bind(this);
-        this.onBottomXChange = this.onBottomXChange.bind(this);
         this.downloadPNG = this.downloadPNG.bind(this);
-        this.onCreateLocally = this.onCreateLocally.bind(this);
     }
 
     async componentDidMount() {
@@ -74,50 +89,15 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         const canvas = this.canvas.current;
         const ctx = this.canvas.current.getContext('2d');
 
-        ctx.font = "30px Comic Sans MS";
         ctx.textAlign = "center";
-
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-
         ctx.drawImage(this.img, 0, 0, canvas.width, canvas.height)
-        ctx.fillText(this.state.bottomText, this.state.bottomX, this.state.bottomY);
-        ctx.fillText(this.state.topText, this.state.topX, this.state.topY);
-    }
 
-    private onBottomTextChange(event: React.ChangeEvent<HTMLInputElement>) {
-        event.preventDefault();
-
-        this.setState({bottomText: event.target.value}, () => this.drawMeme());
-    }
-
-    private onTopTextChange(event: React.ChangeEvent<HTMLInputElement>) {
-        event.preventDefault();
-
-        this.setState({topText: event.target.value}, () => this.drawMeme())
-    }
-
-    private onBottomXChange(event: React.ChangeEvent<HTMLInputElement>) {
-        event.preventDefault();
-
-        this.setState({bottomX: parseInt(event.target.value)}, () => this.drawMeme());
-    }
-
-    private onBottomYChange(event: React.ChangeEvent<HTMLInputElement>) {
-        event.preventDefault();
-
-        this.setState({bottomY: parseInt(event.target.value)}, () => this.drawMeme());
-    }
-
-    private onTopXChange(event: React.ChangeEvent<HTMLInputElement>) {
-        event.preventDefault();
-
-        this.setState({topX: parseInt(event.target.value)}, () => this.drawMeme())
-    }
-
-    private onTopYChange(event: React.ChangeEvent<HTMLInputElement>) {
-        event.preventDefault();
-
-        this.setState({topY: parseInt(event.target.value)}, () => this.drawMeme())
+        this.state.texts.forEach(text => {
+            ctx.font = text.size + "px Comic Sans MS" + text.isBold + text.isItalic;
+            ctx.fillStyle = text.hexColor;
+            ctx.fillText(text.text, text.x, text.y);
+        });
     }
 
     private async onCreateOnServer(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
@@ -125,8 +105,8 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
             method: 'POST',
             body: JSON.stringify({
                 url: this.imgUrl,
-                bottom: this.state.bottomText,
-                top: this.state.topText,
+                bottom: this.state.texts[0].text,
+                top: this.state.texts[1].text,
                 name: this.state.name,
             }),
             headers: {
@@ -139,7 +119,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
 
         console.log(json)
 
-        this.props.history.push('/show-meme/' + json.data.id)
+        this.props.history.push('/meme/show/' + json.data.id)
     }
 
     private downloadPNG(filename = 'canvas.png') {
@@ -164,26 +144,54 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         this.downloadPNG();
     }
 
+    private onTextChange(idx: number, text: Text) {
+        const newTexts = [...this.state.texts];
+        newTexts[idx] = text;
+        this.setState({texts: newTexts}, () => this.drawMeme());
+    }
+
+    private addText() {
+        const newText = {
+            text: "",
+            x: 250,
+            y: 250,
+            size: "50",
+            isBold: "",
+            isItalic: "",
+            hexColor: "#F17013"
+        };
+
+        this.setState({texts: [...this.state.texts, newText]})
+    }
+
+    private RemoveText(index: number) {
+        const newTexts = this.state.texts.filter((_, idx) => index !== idx);
+        this.setState({ texts: newTexts}, () => this.drawMeme());
+    }
+
     render() {
         return (
-            <div> 
-                <canvas width={500} height={500} ref={this.canvas}></canvas>
-                top
-                <input type="text" onChange={this.onTopTextChange}></input>
-                bottom
-                <input type="text" onChange={this.onBottomTextChange}></input>
-                name
-                <input type="text" onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.setState({name: event.target.value})}></input>
-                topX
-                <input type="number" value={this.state.topX} onChange={this.onTopXChange}></input>
-                topY
-                <input type="number" value={this.state.topY} onChange={this.onTopYChange}></input>
-                bottomX
-                <input type="number" value={this.state.bottomX} onChange={this.onBottomXChange}></input>
-                bottomY
-                <input type="number" value={this.state.bottomY} onChange={this.onBottomYChange}></input>
-                <button onClick={this.onCreateOnServer}>Create on Server</button>
-                <button onClick={this.onCreateLocally}>Create locally and download</button>
+            <div>
+                <div id="container"> 
+                    <canvas width={500} height={500} ref={this.canvas}></canvas>
+
+                    <div id="editArea">
+                        <label htmlFor="name">Name</label>
+                        <span><input id="name" type="text" onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.setState({name: event.target.value})}></input></span>
+                        <br/>
+
+                        {this.state.texts.map((text, idx) =>
+                            (<TextEditor key={idx} text={text} onChange={(text) => {this.onTextChange(idx, text)}} onRemove={() => this.RemoveText(idx) }/>)
+                        )}
+                        
+                        <br />
+                        <button onClick={this.addText}>Add Text</button>
+                        <br />
+                        {<button onClick={this.onCreateOnServer}>Create on Server</button>}
+                        <button onClick={this.onCreateLocally}>Create locally and download</button>
+                    </div>
+                </div>
+              
             </div>
         )
     }
