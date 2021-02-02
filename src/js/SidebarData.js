@@ -25,7 +25,7 @@ export const SidebarData = [
     },
     {
         title: 'About us',
-        path:'/information',
+        path:'/about',
         icon: <FaIcons.FaInfo/>,
         cName: 'nav-text'
     },
