@@ -54,7 +54,7 @@ export default class DrawTemplate extends Component<RouteComponentProps> {
         return (
             <div>
                 <h1>Draw template</h1>
-                <DrawOnCanvas width={500} height={500} strokeColor="black" strokeWeight={5} backgroundColor="white" ref={this.setRef}/>
+                <DrawOnCanvas width={500} height={500} strokeColor="black" strokeWeight={5} backgroundColor="grey" ref={this.setRef}/>
                 <button onClick={() => this.changeStrokeWeight(5)}>5</button>
                 <button onClick={() => this.changeStrokeWeight(10)}>10</button>
                 <button onClick={() => this.changeStrokeColor('black')}>black</button>
