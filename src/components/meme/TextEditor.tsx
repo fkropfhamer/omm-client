@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import SketchColorPicker from '../../js/SketchColorPicker';
+import DictateButton from '../DictateButton';
 
 interface Text {
     text: string,
@@ -33,8 +34,12 @@ export default class TextEditor extends Component<Props> {
     private onTextChange(event: React.ChangeEvent<HTMLInputElement>) {
         event.preventDefault();
 
+        this.updateText(event.target.value);        
+    }
+
+    private updateText(text: string) {
         const newText = Object.assign({}, this.props.text);
-        newText.text = event.target.value;
+        newText.text = text;
         this.props.onChange(newText);
     }
 
@@ -108,6 +113,7 @@ export default class TextEditor extends Component<Props> {
                 <label htmlFor="text">Text</label>
                 <span>
                     <input id="text" type="text" onChange={this.onTextChange} value={this.props.text.text}></input>
+                    <DictateButton onSpeech={this.updateText}/>
                 </span>
 
                 <label htmlFor="size">Size</label>

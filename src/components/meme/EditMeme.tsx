@@ -2,6 +2,7 @@ import React from "react"
 import { RouteComponentProps } from "react-router-dom";
 import { apiEndpointUrl } from "../../constants";
 import '../../css/EditMeme.css'
+import DictateButton from "../DictateButton";
 import TextEditor from "./TextEditor"
 
 interface Text {
@@ -177,7 +178,10 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
 
                     <div id="editArea">
                         <label htmlFor="name">Name</label>
-                        <span><input id="name" type="text" onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.setState({name: event.target.value})}></input></span>
+                        <span>
+                            <input id="name" type="text" onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.setState({name: event.target.value})}></input>
+                            <DictateButton onSpeech={(text) => this.setState({name: text})}/>
+                        </span>
                         <br/>
 
                         {this.state.texts.map((text, idx) =>
