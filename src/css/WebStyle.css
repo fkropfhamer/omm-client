@@ -1,0 +1,7 @@
+#container {
+    display: grid;
+    grid-template-columns: 17.5% 30% 35% 17.5%;
+    grid-column-gap: 20px;
+    height: 950px;
+}
+

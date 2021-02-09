@@ -1,6 +1,6 @@
 import React from "react"
 import { RouteComponentProps } from "react-router-dom";
-import { apiEndpointUrl } from "../constants";
+import { apiEndpointUrl } from "../../constants";
 import Meme from "./Meme";
 
 interface RouteParams {id: string}
