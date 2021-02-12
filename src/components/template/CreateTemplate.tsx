@@ -15,7 +15,7 @@ export default class CreateTemplate extends React.Component<RouteComponentProps>
                 <UploadTemplate {...this.props} />
                 <UrlScreenshotTemplate {...this.props} />
                 <DrawTemplate {...this.props} />
-                <CameraPhotoTemplate {...this.props} />
+
             </div>
         );
     }
