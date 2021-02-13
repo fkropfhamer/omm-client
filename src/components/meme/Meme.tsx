@@ -1,3 +1,6 @@
+import classify from "../../util/imageClassification";
+import textToSpeech from "../../util/textToSpeech";
+
 export interface MemeObject {
     url: string,
     name: string,
@@ -28,6 +31,20 @@ async function download(url: string, name: string) {
 export default function Meme(props: Props) {
     const {name, url, views} = props.meme;
 
+    function describe() {
+        const img = new Image(); 
+        img.crossOrigin = "anonymous";
+        img.onload = () => {
+            console.log(img)
+            classify(img).then((p) => {
+                console.log(p);
+                textToSpeech(`I think this image shows ${p.map(a => a.className).join(" or ")}`);
+            });
+
+        }
+        img.src = url;
+    }
+
     return <div>
         <h1>{name}</h1>
         <img src={url} alt={'meme with name "'+ name + '".'}></img>
@@ -35,5 +52,6 @@ export default function Meme(props: Props) {
         <button onClick={()=> {
             download(url, name);
         }}>download</button>
+        <button onClick={describe}>describe</button>
     </div>
 }
