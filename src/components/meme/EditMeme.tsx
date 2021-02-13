@@ -59,6 +59,9 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         this.addText = this.addText.bind(this);
         this.onCreateOnServer = this.onCreateOnServer.bind(this);
         this.downloadPNG = this.downloadPNG.bind(this);
+        this.onCreateLocally = this.onCreateLocally.bind(this);
+        this.onTextChange = this.onTextChange.bind(this);
+        this.removeText = this.removeText.bind(this);
     }
 
     async componentDidMount() {
@@ -164,7 +167,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         this.setState({texts: [...this.state.texts, newText]})
     }
 
-    private RemoveText(index: number) {
+    private removeText(index: number) {
         const newTexts = this.state.texts.filter((_, idx) => index !== idx);
         this.setState({ texts: newTexts}, () => this.drawMeme());
     }
@@ -181,7 +184,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
                         <br/>
 
                         {this.state.texts.map((text, idx) =>
-                            (<TextEditor key={idx} text={text} onChange={(text) => {this.onTextChange(idx, text)}} onRemove={() => this.RemoveText(idx) }/>)
+                            (<TextEditor key={idx} text={text} onChange={(text) => {this.onTextChange(idx, text)}} onRemove={() => this.removeText(idx) }/>)
                         )}
                         
                         <br />
