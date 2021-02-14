@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { apiEndpointUrl } from "../../constants";
+import {useEffect, useState} from "react";
+import {apiEndpointUrl} from "../../constants";
 import Meme from "./Meme";
 
 export default function MemeSlideShow() {
@@ -17,11 +17,21 @@ export default function MemeSlideShow() {
         }
 
         setCurrentMemeIndex(index);
+
     }
 
     function onNext() {
-        setCurrentMemeIndex((currentMemeIndex + 1) %  memes.length);
+        setCurrentMemeIndex((currentMemeIndex + 1) % memes.length);
     }
+
+    function onRandom() {
+
+        const minIndex = 0;
+        const maxIndex = memes.length - 1;
+        const randomIndex = Math.floor(Math.random() * (maxIndex - minIndex + 1)) + minIndex
+        setCurrentMemeIndex(randomIndex);
+    }
+
 
     useEffect(() => {
         const fetchMemes = async () => {
@@ -39,10 +49,11 @@ export default function MemeSlideShow() {
 
     return <div>
         {currentMeme ?
-        <div> 
-            <Meme meme={currentMeme} />
-            <button onClick={onPrev}>pref</button>
-            <button onClick={onNext}>next</button> 
-        </div>: 'loading'}
+            <div>
+                <Meme meme={currentMeme}/>
+                <button onClick={onPrev}>pref</button>
+                <button onClick={onNext}>next</button>
+                <button onClick={onRandom}>random</button>
+            </div> : 'loading'}
     </div>
 }
