@@ -3,7 +3,6 @@ import '../../css/AddImageModal.css';
 import { RadioGroup, Radio, FormControlLabel } from '@material-ui/core';
 
 interface Props {
-    visible: Boolean
     title: string
     addImageToMeme: (position: string, file: File) => void
 }
@@ -31,12 +30,7 @@ class AddImageModal extends Component<Props, State> {
     }
     
     componentDidMount() {
-        this.setState({ visible: this.props.visible })
-    }
-    
-    //unsafe ?
-    componentWillReceiveProps (props: Props) {
-        this.setState({ visible: props.visible })
+        this.setState({ visible: false })
     }
 
     private confirm() {

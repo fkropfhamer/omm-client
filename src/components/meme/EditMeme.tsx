@@ -25,17 +25,18 @@ interface State {
     imgHeight: number,
     canvasWidth: number,
     canvasHeight: number,
-    addImageModalVisible: Boolean,
     texts: Text[]
 }
 
 export default class EditMeme extends React.Component<RouteComponentProps<RouteParams>, State> {
     private canvas: React.RefObject<any>;
+    private addImageModal: React.RefObject<any>;
 
     constructor(props: RouteComponentProps<RouteParams>) {
         super(props);
 
         this.canvas = React.createRef();
+        this.addImageModal = React.createRef();
 
         this.state = {
             name: "",
@@ -61,7 +62,6 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
             ],
             img: null,
             imgUrl: '',
-            addImageModalVisible: false,
             canvasWidth: 500,
             canvasHeight: 500,
             imgWidth: 0,
@@ -194,7 +194,11 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
     }
 
     private showAddImageModal() {
-        this.setState({ addImageModalVisible: true })
+        this.addImageModal.current.setState({visible: true});
+    }
+
+    private confirm() {
+        console.log("woshi confirm hui diao")
     }
 
     private addImageToMeme(position: string, file: File ) {        
@@ -287,7 +291,6 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
     }
 
     render() {
-        const { addImageModalVisible } = this.state;
         return (
             <div>
                 <div id="container"> 
@@ -312,7 +315,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
                     </div>
                 </div>
                 <AddImageModal title={"Choose the positon of new Image relative to current Image"} 
-                        addImageToMeme={(position,file) => this.addImageToMeme(position ,file)} visible={addImageModalVisible}></AddImageModal>
+                        ref={this.addImageModal} addImageToMeme={(position,file) => this.addImageToMeme(position ,file)}></AddImageModal>
             </div>
         )
     }
