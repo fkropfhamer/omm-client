@@ -4,9 +4,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Getting started
 
-If using docker refer to [docker](##Docker).
+If using docker refer to [docker](#Docker).
 
-For development first install the [requirements](##Requirements) and then do the following steps:
+For development first install the [requirements](#Requirements) and then do the following steps:
 1. Install npm packages with `yarn`.
 2. Start the development server with `yarn start`.
 3. The application should be available on `localhost:3000`
