@@ -3,6 +3,7 @@ import { RouteComponentProps } from "react-router-dom";
 import { apiEndpointUrl } from "../../constants";
 import '../../css/EditMeme.css'
 import AddImageModal from "./AddImageModal";
+import PopularTemplateSelector from "./TemplateSelector";
 import TextEditor from "./TextEditor"
 
 interface Text {
@@ -197,10 +198,6 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         this.addImageModal.current.setState({visible: true});
     }
 
-    private confirm() {
-        console.log("woshi confirm hui diao")
-    }
-
     private addImageToMeme(position: string, file: File ) {        
         let reader = new FileReader();
         let newImgHeight: number;
@@ -290,6 +287,18 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
 
     }
 
+    private changeTemplate(imgUrl: string) {
+        const img = new Image();
+        img.src = imgUrl;
+        img.onload = () => {
+            this.setState({imgUrl: imgUrl});
+            this.setState({imgWidth: img.width})
+            this.setState({imgHeight: img.height})
+            this.setState({img: img})
+            this.drawMeme();
+        }
+    }
+
     render() {
         return (
             <div>
@@ -297,6 +306,10 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
                     <canvas width={this.state.canvasWidth} height={this.state.canvasHeight} ref={this.canvas}></canvas>
 
                     <div id="editArea">
+
+                        <PopularTemplateSelector onChangeTemplate={(imgUrl) => this.changeTemplate(imgUrl) }></PopularTemplateSelector>
+                        <br/>
+
                         <label htmlFor="name">Name</label>
                         <span><input id="name" type="text" onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.setState({name: event.target.value})}></input></span>
                         <br/>
