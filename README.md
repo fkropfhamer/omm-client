@@ -56,5 +56,8 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 | react-router-dom | MIT | DOM bindings for React Router. | https://www.npmjs.com/package/react-router-dom |
 | typescript | Apache-2.0 | TypeScript is a language for application-scale JavaScript. TypeScript adds optional types to JavaScript that support tools for large-scale JavaScript applications for any browser, for any host, on any OS. TypeScript compiles to readable, standards-based JavaScript. | https://www.npmjs.com/package/typescript |
 | web-vitals | Apache-2.0 | The web-vitals library is a tiny (~1K), modular library for measuring all the Web Vitals metrics on real users, in a way that accurately matches how they're measured by Chrome and reported to other Google tools (e.g. Chrome User Experience Report, Page Speed Insights, Search Console's Speed Report). | https://www.npmjs.com/package/web-vitals |
+| react-color | MIT | Color Pickers from Sketch, Photoshop, Chrome, Github, Twitter & more | https://www.npmjs.com/package/react-color |
+| react-icons | MIT | Include popular icons in your React projects easily with react-icons, which utilizes ES6 imports that allows you to include only the icons that your project is using. | https://www.npmjs.com/package/react-icons |
+| react-webcam | MIT | Webcam component for React. | https://www.npmjs.com/package/react-webcam |
 
 Additionally the corresponding typescript types from https://github.com/DefinitelyTyped/DefinitelyTyped and the corresponding testing libraries from https://testing-library.com/. 
