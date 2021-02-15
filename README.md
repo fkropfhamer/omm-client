@@ -1,7 +1,19 @@
-# Getting Started with Create React App
+# OMM-CLIENT
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Getting started
+
+If using docker refer to [docker](##Docker).
+
+For development first install the [requirements](##Requirements) and then do the following steps:
+1. Install npm packages with `yarn`.
+2. Start the development server with `yarn start`.
+3. The application should be available on `localhost:3000`
+
+## Requirements
+- yarn
+- node
 ## Available Scripts
 
 In the project directory, you can run:
@@ -48,9 +60,15 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 ## Docker
 
 ### build
+build the docker container
+
 `docker build .`
 
 ### run
+
+Run the corresponding docker container after it is build.
+`%container-tag%` corresponds to the tag of the build container.
+
 `docker run -p 3000:80 %container-tag%`
 
 ## Dependencies
