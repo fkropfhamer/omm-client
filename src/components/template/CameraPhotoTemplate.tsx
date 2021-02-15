@@ -5,12 +5,15 @@ import Webcam from "react-webcam";
 import '../../css/Display.css'
 
 export default class CameraPhotoTemplate extends React.Component<RouteComponentProps, { webcam: Webcam }> {
-    setRef = (webcam) => {
+    setRef = (webcam: Webcam) => {
         this.setState({webcam: webcam})
     }
 
     capturePhoto = () => {
         const photo = this.state.webcam.getScreenshot({width: 500, height: 500});
+        if (!photo) {
+            return;
+        }
         const blob = this.convertToBlob(photo);
         const data = new FormData();
         data.append("template", blob)
@@ -26,9 +29,12 @@ export default class CameraPhotoTemplate extends React.Component<RouteComponentP
             })
             .catch(err => console.log(err));
     }
-    convertToBlob = (dataurl) => {
-        var dataArr = dataurl.split(','), mime = dataArr[0].match(/:(.*?);/)[1],
-            bstr = atob(dataArr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+    convertToBlob = (dataurl: string) => {
+        const dataArr = dataurl.split(',');
+        const mime = dataArr[0].match(/:(.*?);/)![1];
+        const bstr = atob(dataArr[1])
+        let n = bstr.length
+        const u8arr = new Uint8Array(n);
         while (n--) {
             u8arr[n] = bstr.charCodeAt(n);
         }
