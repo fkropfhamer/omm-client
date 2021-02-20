@@ -51,7 +51,7 @@ export default function Meme(props: Props) {
     fileformat,
     votes,
     comments,
-    tags,
+    //tags,
     createdAt,
   } = props.meme;
 
