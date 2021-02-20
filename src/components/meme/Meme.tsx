@@ -1,12 +1,12 @@
 import {
     FacebookShareButton,
-    LinkedinShareButton,
+    //LinkedinShareButton,
     TwitterShareButton,
-    TelegramShareButton,
+    //TelegramShareButton,
     WhatsappShareButton,
-    PinterestShareButton,
-    VKShareButton,
-    OKShareButton,
+    //PinterestShareButton,
+    //VKShareButton,
+    //OKShareButton,
     RedditShareButton,
     TumblrShareButton,
     LivejournalShareButton,
@@ -14,19 +14,19 @@ import {
     ViberShareButton,
     WorkplaceShareButton,
     LineShareButton,
-    PocketShareButton,
-    InstapaperShareButton,
+    //PocketShareButton,
+    //InstapaperShareButton,
     EmailShareButton,
-    FacebookShareCount,
+   //FacebookShareCount,
     TwitterIcon,
     FacebookIcon,
     FacebookMessengerShareButton,
     FacebookMessengerIcon,
     WhatsappIcon,
     RedditIcon,
-    RedditShareCount,
+    //RedditShareCount,
     TumblrIcon,
-    TumblrShareCount,
+    //TumblrShareCount,
     LivejournalIcon, MailruIcon, ViberIcon, WorkplaceIcon, LineIcon, EmailIcon,
 } from 'react-share';
 
@@ -59,9 +59,7 @@ async function download(url: string, name: string) {
 }
 
 export default function Meme(props: Props) {
-    console.log(props);
     const {name, url, views, votes} = props.meme;
-console.log({name, url, views, votes});
     return <div>
         <h1>{name}</h1>
         <img src={url} alt={'meme with name "' + name + '".'}></img>
