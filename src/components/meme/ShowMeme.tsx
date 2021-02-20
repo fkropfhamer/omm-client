@@ -10,6 +10,7 @@ interface State {
     imgName: string
     isLoading: boolean
     imgViews: number
+    imgVotes: number
 }
 
 export default class ShowMeme extends React.Component<RouteComponentProps<RouteParams>, State> {
@@ -21,6 +22,7 @@ export default class ShowMeme extends React.Component<RouteComponentProps<RouteP
             imgName: '',
             isLoading: true,
             imgViews: 0,
+            imgVotes: 0,
         }
     }
 
@@ -36,15 +38,16 @@ export default class ShowMeme extends React.Component<RouteComponentProps<RouteP
             imgUrl: json.data.meme.url,
             imgName: json.data.meme.name,
             imgViews: json.data.meme.views,
+            imgVotes: 0,
         })
     }
 
     render() {
-        const meme = {url: this.state.imgUrl, name: this.state.imgName, views: this.state.imgViews};
+        const meme = {url: this.state.imgUrl, name: this.state.imgName, views: this.state.imgViews, votes: this.state.imgVotes};
 
-
+console.log('meme'+meme)
         return (
-            <div> 
+            <div>
                 {!this.state.isLoading ? <Meme meme={meme}/> : 'Loading'}
             </div>
         )

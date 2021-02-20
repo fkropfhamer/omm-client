@@ -34,6 +34,7 @@ export interface MemeObject {
     url: string,
     name: string,
     views: number,
+    votes: number,
 }
 
 interface Props {
@@ -58,8 +59,9 @@ async function download(url: string, name: string) {
 }
 
 export default function Meme(props: Props) {
-    const {name, url, views} = props.meme;
-
+    console.log(props);
+    const {name, url, views, votes} = props.meme;
+console.log({name, url, views, votes});
     return <div>
         <h1>{name}</h1>
         <img src={url} alt={'meme with name "' + name + '".'}></img>
@@ -145,6 +147,6 @@ export default function Meme(props: Props) {
         >
             <LineIcon size={30} round/>
         </LineShareButton>
-
+        <h1>Votes: {votes}</h1>
     </div>
 }
