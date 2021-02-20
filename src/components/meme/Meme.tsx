@@ -56,6 +56,7 @@ export default function Meme(props: Props) {
   } = props.meme;
 
   console.log(createdAt);
+  console.log("lalal");
 
   return (
     <div>
