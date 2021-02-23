@@ -10,15 +10,17 @@ export default function MemeOverview() {
     const fetchMemes = async () => {
       const res = await fetch(apiEndpointUrl + "meme");
       const json = await res.json();
-
-      console.log(json);
-      console.log(json.data.memes);
-
       setMemes(json.data.memes);
     };
 
     fetchMemes();
   }, []);
+  const handleSort = async (sortBy: string) => {
+    console.log(sortBy);
+    const res = await fetch(`${apiEndpointUrl}meme/sort/${sortBy}`);
+    const json = await res.json();
+    setMemes(json.data.memes);
+  };
 
   return (
     <div>
@@ -34,9 +36,27 @@ export default function MemeOverview() {
               </Dropdown.Toggle>
 
               <Dropdown.Menu>
-                <Dropdown.Item href="#/action-1">date</Dropdown.Item>
-                <Dropdown.Item href="#/action-2">vote</Dropdown.Item>
-                <Dropdown.Item href="#/action-3">view</Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => {
+                    handleSort("createdAt");
+                  }}
+                >
+                  date
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => {
+                    handleSort("votes");
+                  }}
+                >
+                  vote
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => {
+                    handleSort("views");
+                  }}
+                >
+                  view
+                </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           </Col>
