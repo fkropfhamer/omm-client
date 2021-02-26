@@ -30,12 +30,12 @@ export default function MemeSlideShow() {
     }
 
 
-     function onRandom() {
+    function onRandom() {
 
         const minIndex = 0;
         const maxIndex = memes.length - 1;
         const randomIndex = Math.floor(Math.random() * (maxIndex - minIndex + 1)) + minIndex
-         setCurrentMemeIndex(randomIndex);
+        setCurrentMemeIndex(randomIndex);
     }
 
     useEffect(() => {
@@ -61,12 +61,12 @@ export default function MemeSlideShow() {
 
     useEffect(() => {
         if (randActive) {
-             const randInterval = setInterval(() =>
-                 setCurrentMemeIndex( Math.floor(Math.random() * ((memes.length - 1) + 1))
-        )
-             , 1000);
+            const randInterval = setInterval(() =>
+                    setCurrentMemeIndex(Math.floor(Math.random() * ((memes.length - 1) + 1))
+                    )
+                , 1000);
 
-                return () => clearInterval(randInterval);
+            return () => clearInterval(randInterval);
         }
     }, [memes.length, randActive]);
 
