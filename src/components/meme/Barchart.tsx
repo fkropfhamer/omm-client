@@ -10,7 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const Barchart = (props) => {
+const Barchart = (props: any) => {
   const { views, votes, comments } = props;
   console.log(props);
   const mydata = [

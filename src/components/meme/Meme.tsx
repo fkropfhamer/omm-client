@@ -11,8 +11,8 @@ import {
   FormControl,
 } from "react-bootstrap";
 import { FcLike } from "react-icons/fc";
-import Barchart from "./Barchart.js";
-import PassiveInfo from "./PassiveInfo.js";
+import Barchart from "./Barchart";
+import PassiveInfo from "./PassiveInfo";
 
 export interface MemeObject {
   url: string;

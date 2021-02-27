@@ -11,9 +11,9 @@ import {
   FormControl,
 } from "react-bootstrap";
 import { FcLike } from "react-icons/fc";
-import Barchart from "./Barchart.js";
+import Barchart from "./Barchart";
 
-const PassiveInfo = (props) => {
+const PassiveInfo = (props: any) => {
   const { views, votes, comments, fileformat } = props;
   console.log(props);
 
@@ -52,7 +52,7 @@ const PassiveInfo = (props) => {
                       <Accordion.Collapse eventKey="0">
                         <Card.Body>
                           <ListGroup>
-                            {comments.map((comment, i) => {
+                            {comments.map((comment: any, i: number) => {
                               return (
                                 <ListGroup.Item key={i}>
                                   {comment}
