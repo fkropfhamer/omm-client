@@ -1,235 +1,377 @@
-import React from "react";
+import React from "react"
+import { Form } from "react-bootstrap";
 import { RouteComponentProps } from "react-router-dom";
 import { apiEndpointUrl } from "../../constants";
-import "../../css/EditMeme.css";
-import TextEditor from "./TextEditor";
+import '../../css/EditMeme.css'
+import DictateButton from "../DictateButton";
+import AddImageModal from "./AddImageModal";
+import PopularTemplateSelector from "./TemplateSelector";
+import TextEditor from "./TextEditor"
+import DescribeButton from "../../util/DescribeButton";
+import VoiceControlButton from "../VoiceControlButton";
 
 interface Text {
-  text: string;
-  x: number;
-  y: number;
-  size: string;
-  isBold: string;
-  isItalic: string;
-  hexColor: string;
+    text: string,
+    x: number,
+    y: number,
+    size: string,
+    isBold: string
+    isItalic: string
+    hexColor: string
 }
 
-interface RouteParams {
-  id: string;
-}
+interface RouteParams {url: string}
 
 interface State {
-  name: string;
-  texts: Text[];
-  isPrivate: boolean;
+    name: string,
+    img: HTMLElement | null,
+    imgUrl: string,
+    imgWidth: number,
+    imgHeight: number,
+    canvasWidth: number,
+    canvasHeight: number,
+    texts: Text[],
+    isPrivate: boolean,
 }
 
-export default class EditMeme extends React.Component<
-  RouteComponentProps<RouteParams>,
-  State
-> {
-  private canvas: React.RefObject<any>;
-  private img?: HTMLImageElement;
-  private imgUrl = "";
+export default class EditMeme extends React.Component<RouteComponentProps<RouteParams>, State> {
+    private canvas: React.RefObject<any>;
+    private addImageModal: React.RefObject<any>;
 
-  constructor(props: RouteComponentProps<RouteParams>) {
-    super(props);
+    constructor(props: RouteComponentProps<RouteParams>) {
+        super(props);
 
-    this.canvas = React.createRef();
+        this.canvas = React.createRef();
+        this.addImageModal = React.createRef();
 
-    this.state = {
-      name: "",
-      texts: [
-        {
-          text: "",
-          x: 250,
-          y: 50,
-          size: "50",
-          isBold: "",
-          isItalic: "",
-          hexColor: "#F17013",
-        },
-        {
-          text: "",
-          x: 250,
-          y: 450,
-          size: "50",
-          isBold: "",
-          isItalic: "",
-          hexColor: "#F17013",
-        },
-      ],
-      isPrivate: false,
-    };
+        this.state = {
+            name: "",
+            texts: [
+                {
+                    text: "",
+                    x: 250,
+                    y: 50,
+                    size: "50",
+                    isBold: "",
+                    isItalic: "",
+                    hexColor: "#F17013"
+                },
+                {
+                    text: "",
+                    x: 250,
+                    y: 450,
+                    size: "50",
+                    isBold: "",
+                    isItalic: "",
+                    hexColor: "#F17013"
+                }
+            ],
+            img: null,
+            imgUrl: '',
+            canvasWidth: 500,
+            canvasHeight: 500,
+            imgWidth: 0,
+            imgHeight: 0,
+            isPrivate: false,
+        }
 
-    this.drawMeme = this.drawMeme.bind(this);
-    this.addText = this.addText.bind(this);
-    this.onCreateOnServer = this.onCreateOnServer.bind(this);
-    this.downloadPNG = this.downloadPNG.bind(this);
-    this.onCreateLocally = this.onCreateLocally.bind(this);
-    this.onTextChange = this.onTextChange.bind(this);
-    this.removeText = this.removeText.bind(this);
-    this.setPrivate = this.setPrivate.bind(this);
-  }
-
-  async componentDidMount() {
-    const canvas = this.canvas.current;
-    const ctx = this.canvas.current.getContext("2d");
-
-    const id = this.props.match.params.id;
-
-    const res = await fetch(apiEndpointUrl + "template/?id=" + id);
-    const json = await res.json();
-
-    this.imgUrl = json.data.template.url;
-
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.src = json.data.template.url;
-
-    console.log(json.data.template.url);
-
-    img.onload = () => {
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    };
-
-    this.img = img;
-  }
-
-  private drawMeme() {
-    const canvas = this.canvas.current;
-    const ctx = this.canvas.current.getContext("2d");
-
-    ctx.textAlign = "center";
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(this.img, 0, 0, canvas.width, canvas.height);
-
-    this.state.texts.forEach((text) => {
-      ctx.font = text.size + "px Comic Sans MS" + text.isBold + text.isItalic;
-      ctx.fillStyle = text.hexColor;
-      ctx.fillText(text.text, text.x, text.y);
-    });
-  }
-
-  private async onCreateOnServer(
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) {
-    const res = await fetch(apiEndpointUrl + "meme", {
-      method: "POST",
-      body: JSON.stringify({
-        url: this.imgUrl,
-        bottom: this.state.texts[0].text,
-        top: this.state.texts[1].text,
-        name: this.state.name,
-        isPrivate: this.state.isPrivate,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    });
-
-    const json = await res.json();
-
-    console.log(json);
-
-    this.props.history.push("/meme/show/" + json.data.id);
-  }
-
-  private downloadPNG(filename = "canvas.png") {
-    const dataURL = this.canvas.current.toDataURL("image/png");
-    EditMeme.downloadURI(dataURL, filename);
-  }
-
-  private static downloadURI(uri: string, name: string) {
-    const link = document.createElement("a");
-    link.download = name;
-    link.href = uri;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
-
-  private onCreateLocally(
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) {
-    if (this.state.name !== "") {
-      this.downloadPNG(this.state.name + ".png");
+        this.drawMeme = this.drawMeme.bind(this);
+        this.addText = this.addText.bind(this);
+        this.onCreateOnServer = this.onCreateOnServer.bind(this);
+        this.downloadPNG = this.downloadPNG.bind(this);
+        this.onCreateLocally = this.onCreateLocally.bind(this);
+        this.onTextChange = this.onTextChange.bind(this);
+        this.removeText = this.removeText.bind(this);
+        this.showAddImageModal = this.showAddImageModal.bind(this);
+        this.addImageToMeme = this.addImageToMeme.bind(this);
+        this.setPrivate = this.setPrivate.bind(this);
+        this.onSpeech = this.onSpeech.bind(this);
     }
 
-    this.downloadPNG();
-  }
+    async componentDidMount() {
+        const canvas = this.canvas.current;
+        const ctx = this.canvas.current.getContext('2d');
 
-  private onTextChange(idx: number, text: Text) {
-    const newTexts = [...this.state.texts];
-    newTexts[idx] = text;
-    this.setState({ texts: newTexts }, () => this.drawMeme());
-  }
+        const { url } = this.props.match.params;
 
-  private addText() {
-    const newText = {
-      text: "",
-      x: 250,
-      y: 250,
-      size: "50",
-      isBold: "",
-      isItalic: "",
-      hexColor: "#F17013",
-    };
+        console.log(url);
 
-    this.setState({ texts: [...this.state.texts, newText] });
-  }
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.src = decodeURIComponent(url);
+        img.onload = () => {
+            this.setState({imgWidth: img.width})
+            this.setState({imgHeight: img.height})
+            this.setState({img: img})
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+        }
+    }
 
-  private removeText(index: number) {
-    const newTexts = this.state.texts.filter((_, idx) => index !== idx);
-    this.setState({ texts: newTexts }, () => this.drawMeme());
-  }
-  private setPrivate(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-    this.setState({ isPrivate: true });
-  }
+    private drawMeme() {
+        const canvas = this.canvas.current;
+        const ctx = this.canvas.current.getContext('2d');
 
-  render() {
-    return (
-      <div>
-        <div id="container">
-          <canvas width={500} height={500} ref={this.canvas}></canvas>
+        ctx.textAlign = "center";
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-          <div id="editArea">
-            <label htmlFor="name">Name</label>
-            <span>
-              <input
-                id="name"
-                type="text"
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  this.setState({ name: event.target.value })
+        ctx.drawImage(this.state.img, 0, 0, canvas.width, canvas.height)
+
+        this.drawTexts();
+    }
+
+    private drawTexts() {
+        const ctx = this.canvas.current.getContext('2d');
+
+        this.state.texts.forEach(text => {
+            ctx.font = text.size + "px Comic Sans MS" + text.isBold + text.isItalic;
+            ctx.fillStyle = text.hexColor;
+            ctx.fillText(text.text, text.x, text.y);
+        });
+    }
+
+    private async onCreateOnServer(event?: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+
+        const res = await fetch(apiEndpointUrl + 'meme', {
+            method: 'POST',
+            body: JSON.stringify({
+                url: decodeURIComponent(this.props.match.params.url),
+                bottom: this.state.texts[0].text,
+                top: this.state.texts[1].text,
+                name: this.state.name,
+                isPrivate: this.state.isPrivate,
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            }
+        })
+
+        const json = await res.json();
+
+        console.log(json)
+
+        this.props.history.push('/meme/show/' + json.data.id)
+    }
+
+    private downloadPNG(filename = 'canvas.png') {
+        const dataURL = this.canvas.current.toDataURL('image/png');
+        EditMeme.downloadURI(dataURL, filename);
+    }
+
+    private static downloadURI(uri: string, name: string) {
+        const link = document.createElement('a');
+        link.download = name;
+        link.href = uri;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    private onCreateLocally(event?: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+        if (this.state.name !== '') {
+            this.downloadPNG(this.state.name + '.png')
+        }
+
+        this.downloadPNG();
+    }
+
+    private onTextChange(idx: number, text: Text) {
+        const newTexts = [...this.state.texts];
+        newTexts[idx] = text;
+        this.setState({texts: newTexts}, () => this.drawMeme());
+    }
+
+    private addText() {
+        const newText = {
+            text: "",
+            x: 250,
+            y: 250,
+            size: "50",
+            isBold: "",
+            isItalic: "",
+            hexColor: "#F17013"
+        };
+
+        this.setState({texts: [...this.state.texts, newText]})
+    }
+
+    private removeText(index: number) {
+        const newTexts = this.state.texts.filter((_, idx) => index !== idx);
+        this.setState({ texts: newTexts}, () => this.drawMeme());
+    }
+
+    private showAddImageModal() {
+        this.addImageModal.current.setState({visible: true});
+    }
+
+    private addImageToMeme(position: string, file: File ) {
+        let reader = new FileReader();
+        let newImgHeight: number;
+        let newImgWidth: number;
+
+        try {
+            reader.readAsDataURL(file);
+            reader.onload = (event: Event) => {
+                let newImg = new Image();
+                newImg.crossOrigin = "anonymous";
+                newImg.src = reader.result as string;
+
+                newImg.onload = (event: Event) => {
+                    newImgHeight = newImg.height;
+                    newImgWidth = newImg.width;
+
+                    if(position === "left") {
+                        const canvas = this.canvas.current;
+                        const ctx = this.canvas.current.getContext('2d');
+
+                        ctx.textAlign = "center";
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                        //TODO: Does the height need to be scaled equally
+                        let widthPercent = newImgWidth / (this.state.imgWidth + newImgWidth)
+
+                        console.log(widthPercent)
+
+                        ctx.drawImage(newImg, 0, 0, widthPercent * canvas.width, canvas.height)
+                        ctx.drawImage(this.state.img, widthPercent * canvas.width, 0, (1 - widthPercent) * canvas.width, canvas.height)
+                    }
+
+                    else if(position === "right") {
+                        const canvas = this.canvas.current;
+                        const ctx = this.canvas.current.getContext('2d');
+
+                        ctx.textAlign = "center";
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                        //TODO: Does the height need to be scaled equally
+                        let widthPercent = this.state.imgWidth / (this.state.imgWidth + newImgWidth)
+
+                        console.log(widthPercent)
+
+                        ctx.drawImage(this.state.img, 0, 0, widthPercent * canvas.width, canvas.height)
+                        ctx.drawImage(newImg, widthPercent * canvas.width, 0, (1 - widthPercent) * canvas.width, canvas.height)
+                    }
+                    else if(position === "above") {
+                        this.setState({canvasHeight: this.state.canvasHeight + newImgHeight})
+
+                        const canvas = this.canvas.current;
+                        const ctx = this.canvas.current.getContext('2d');
+
+                        ctx.textAlign = "center";
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                        ctx.drawImage(newImg, 0, 0, canvas.width, newImgHeight)
+                        ctx.drawImage(this.state.img, 0, newImgHeight, canvas.width, canvas.height-newImgHeight)
+                    }
+                    else if(position === "below") {
+                        let oldCanvasHeight = this.state.canvasHeight;
+                        this.setState({canvasHeight: this.state.canvasHeight + newImgHeight})
+
+                        const canvas = this.canvas.current;
+                        const ctx = this.canvas.current.getContext('2d');
+
+                        ctx.textAlign = "center";
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                        ctx.drawImage(this.state.img, 0, 0, canvas.width, oldCanvasHeight)
+                        ctx.drawImage(newImg, 0, oldCanvasHeight, canvas.width, newImgHeight)
+                    }
+
+                    const dataURL = this.canvas.current.toDataURL();
+                    const img = new Image();
+                    img.crossOrigin = "anonymous";
+                    img.src = dataURL;
+                    img.onload = () => {
+                        this.setState({img: img})
+                    }
+
+                    this.drawTexts();
                 }
-              ></input>
-            </span>
-            <br />
+            }
+        } catch(err) {
+            console.log("No File Uploaded");
+        }
 
-            {this.state.texts.map((text, idx) => (
-              <TextEditor
-                key={idx}
-                text={text}
-                onChange={(text) => {
-                  this.onTextChange(idx, text);
-                }}
-                onRemove={() => this.removeText(idx)}
-              />
-            ))}
+    }
 
-            <br />
-            <button onClick={this.addText}>Add Text</button>
-            <br />
-            {<button onClick={this.setPrivate}>set to private</button>}
-            {<button onClick={this.onCreateOnServer}>Create on Server</button>}
+    private changeTemplate(imgUrl: string) {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.src = imgUrl;
+        img.onload = () => {
+            this.setState({imgUrl: imgUrl});
+            this.setState({imgWidth: img.width})
+            this.setState({imgHeight: img.height})
+            this.setState({img: img})
+            this.drawMeme();
+        }
+    }
 
-            <button onClick={this.onCreateLocally}>
-              Create locally and download
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
+    private setPrivate(event: any) {
+        const isPrivate = !this.state.isPrivate;
+
+        this.setState({ isPrivate });
+    }
+
+    private onSpeech(result: string) {
+        if (result.includes('add') && result.includes('text')) {
+            this.addText();
+        }
+
+        if (result.includes('add') && result.includes('image')) {
+            this.showAddImageModal();
+        }
+
+        if (result.includes('remove') && result.includes('text')) {
+            this.removeText(this.state.texts.length - 1);
+        }
+
+        if (result.includes('create') && result.includes('server')) {
+            this.onCreateOnServer();
+        }
+
+        if ((result.includes('create') && (result.includes('local') || result.includes('locally'))) || result.includes('download')) {
+            this.onCreateLocally();
+        }
+    }
+
+    render() {
+        return (
+            <div>
+                <div id="container">
+                    <canvas width={this.state.canvasWidth} height={this.state.canvasHeight} ref={this.canvas}></canvas>
+
+                    <div id="editArea">
+
+                        <PopularTemplateSelector onChangeTemplate={(imgUrl) => this.changeTemplate(imgUrl) }></PopularTemplateSelector>
+                        <br/>
+
+                        <label htmlFor="name">Name</label>
+                        <span>
+                            <input id="name" value={this.state.name} type="text" onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.setState({name: event.target.value})}></input>
+                            <DictateButton onSpeech={(text) => this.setState({name: text})}/>
+                        </span>
+                        <br/>
+
+                        {this.state.texts.map((text, idx) =>
+                            (<TextEditor key={idx} text={text} onChange={(text) => {this.onTextChange(idx, text)}} onRemove={() => this.removeText(idx) }/>)
+                        )}
+
+                        <br />
+                        <button onClick={this.addText}>Add Text</button>
+                        <br />
+                        <button onClick={this.showAddImageModal}>Add Image</button>
+                        <br />
+                        <Form.Check type="checkbox" checked={this.state.isPrivate} onChange={this.setPrivate} label="private"/>
+                        <button onClick={this.onCreateOnServer}>Create on Server</button>
+                        <button onClick={this.onCreateLocally}>Create locally and download</button>
+                        <DescribeButton url={decodeURIComponent(this.props.match.params.url)} />
+                    </div>
+                </div>
+                <AddImageModal title={"Choose the positon of new Image relative to current Image"}
+                        ref={this.addImageModal} addImageToMeme={(position,file) => this.addImageToMeme(position ,file)}></AddImageModal>
+                <VoiceControlButton onSpeech={this.onSpeech} />
+            </div>
+        )
+    }
 }

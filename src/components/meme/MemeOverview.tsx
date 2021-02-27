@@ -16,7 +16,6 @@ export default function MemeOverview() {
     fetchMemes();
   }, []);
   const handleSort = async (sortBy: string) => {
-    console.log(sortBy);
     const res = await fetch(`${apiEndpointUrl}meme/sort/${sortBy}`);
     const json = await res.json();
     setMemes(json.data.memes);

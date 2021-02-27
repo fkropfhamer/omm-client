@@ -41,7 +41,7 @@ export default class ShowMeme extends React.Component<
 
   async componentDidMount() {
     const id = this.props.match.params.id;
-
+ console.log('id is'+id);
     const res = await fetch(apiEndpointUrl + "meme?id=" + id);
     const json = await res.json();
 

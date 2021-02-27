@@ -11,6 +11,9 @@ import MemeSlideShow from "./components/meme/MemeSlideShow";
 import Navbar from "./components/Navbar";
 import ShowMeme from "./components/meme/ShowMeme";
 import ShowTemplate from "./components/template/ShowTemplate";
+import Login from './components/Login';
+import Register from './components/Register';
+import Profile from './components/Profile';
 
 function App() {
   return (
@@ -31,9 +34,8 @@ function App() {
           <MemeOverview />
         </Route>
         <Route
-          path="/meme/edit/:id"
-          render={(props) => <EditMeme {...props} />}
-        />
+            path="/meme/edit/:url"
+            render={(props) => <EditMeme {...props}/>}/>
         <Route
           path="/meme/show/:id"
           render={(props) => <ShowMeme {...props} />}
@@ -42,9 +44,11 @@ function App() {
           path="/template/show/:id"
           render={(props) => <ShowTemplate {...props} />}
         />
-        <Route path="/">
-          <Home />
-        </Route>
+        <Route path="/login" render={props => <Login {...props} />} />
+        <Route path="/register" render={props => <Register {...props} />} />
+        <Route path="/profile/:jwt" render={props => <Profile {...props} />} />
+        <Route path="/" render={props => <Home {...props} />}/>
+          
       </Switch>
     </Router>
   );

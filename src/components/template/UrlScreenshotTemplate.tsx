@@ -25,10 +25,10 @@ export default class UrlScreenshotTemplate extends React.Component<RouteComponen
             method: "POST",
             body: data
         })
-        .then(res => res.json()) 
+        .then(res => res.json())
         .then(json => {
-            console.log(json);
-            this.props.history.push('/meme/edit/' + json.data.id)
+            const encodedUrl =  encodeURIComponent(apiEndpointUrl + 'template/image/' + json.data.id);
+            this.props.history.push('/meme/edit/' + encodedUrl);
         })
         .catch(err => console.log(err));
     }

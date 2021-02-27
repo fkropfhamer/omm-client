@@ -75,7 +75,12 @@ Run the corresponding docker container after it is build.
 
 | Name        | License       | Description  | Link |
 | ----------- | ------------- | ------------ | ---- |
+| @tensorflow-models/mobilenet | Apache-2.0 | MobileNets are small, low-latency, low-power models parameterized to meet the resource constraints of a variety of use cases. They can be built upon for classification, detection, embeddings and segmentation similar to how other popular large scale models, such as Inception, are used. | https://www.npmjs.com/package/@tensorflow-models/mobilenet |
+| @tensorflow/tfjs-converter | Apache-2.0 | TensorFlow.js converter is an open source library to load a pretrained TensorFlow SavedModel or TensorFlow Hub module into the browser and run inference through TensorFlow.js. | https://www.npmjs.com/package/@tensorflow/tfjs-converter | @material-ui/core | MIT | React components for faster and simpler web development. Build your own design system, or start with Material Design. | https://www.npmjs.com/package/@material-ui/core |
+| @tensorflow/tfjs-core | Apache-2.0 | A part of the TensorFlow.js ecosystem, this repo hosts @tensorflow/tfjs-core, the TensorFlow.js Core API, which provides low-level, hardware-accelerated linear algebra operations and an eager API for automatic differentiation. | https://www.npmjs.com/package/@tensorflow/tfjs-core |
+| bootstrap | MIT | Sleek, intuitive, and powerful front-end framework for faster and easier web development. | https://www.npmjs.com/package/bootstrap |
 | react | MIT | React is a JavaScript library for creating user interfaces. | https://www.npmjs.com/package/react |
+| react-bootstrap | MIT | Bootstrap 4 components built with React. | https://www.npmjs.com/package/react-bootstrap |
 | react-dom | MIT | This package serves as the entry point to the DOM and server renderers for React. It is intended to be paired with the generic React package, which is shipped as react to npm. | https://www.npmjs.com/package/react-dom |
 | react-scripts | MIT | This package includes scripts and configuration used by Create React App. | https://www.npmjs.com/package/react-scripts |
 | react-router-dom | MIT | DOM bindings for React Router. | https://www.npmjs.com/package/react-router-dom |
@@ -84,5 +89,7 @@ Run the corresponding docker container after it is build.
 | react-color | MIT | Color Pickers from Sketch, Photoshop, Chrome, Github, Twitter & more | https://www.npmjs.com/package/react-color |
 | react-icons | MIT | Include popular icons in your React projects easily with react-icons, which utilizes ES6 imports that allows you to include only the icons that your project is using. | https://www.npmjs.com/package/react-icons |
 | react-webcam | MIT | Webcam component for React. | https://www.npmjs.com/package/react-webcam |
+| recharts | MIT | Recharts is a Redefined chart library built with React and D3. | https://www.npmjs.com/package/recharts | 
+| react-share | MIT | Social media share buttons and share counts for React. | https://www.npmjs.com/package/react-share |
 
 Additionally the corresponding typescript types from https://github.com/DefinitelyTyped/DefinitelyTyped and the corresponding testing libraries from https://testing-library.com/. 
