@@ -29,6 +29,7 @@ export default class TextEditor extends Component<Props> {
         this.onBoldClick = this.onBoldClick.bind(this);
         this.onItalicClick = this.onItalicClick.bind(this);
         this.onColorChange = this.onColorChange.bind(this);
+        this.updateText = this.updateText.bind(this);
     }
     
     private onTextChange(event: React.ChangeEvent<HTMLInputElement>) {

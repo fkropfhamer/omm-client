@@ -324,7 +324,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
 
                         <label htmlFor="name">Name</label>
                         <span>
-                            <input id="name" type="text" onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.setState({name: event.target.value})}></input>
+                            <input id="name" value={this.state.name} type="text" onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.setState({name: event.target.value})}></input>
                             <DictateButton onSpeech={(text) => this.setState({name: text})}/>
                         </span>
                         <br/>
@@ -338,7 +338,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
                         <br />
                         <button onClick={this.showAddImageModal}>Add Image</button>
                         <br />
-                        <Form.Check type="checkbox" checked={this.state.isPrivate} onClick={this.setPrivate} label="private"/>
+                        <Form.Check type="checkbox" checked={this.state.isPrivate} onChange={this.setPrivate} label="private"/>
                         <button onClick={this.onCreateOnServer}>Create on Server</button>
                         <button onClick={this.onCreateLocally}>Create locally and download</button>
                         <DescribeButton url={decodeURIComponent(this.props.match.params.url)} />
