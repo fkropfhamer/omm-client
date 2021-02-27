@@ -1,16 +1,10 @@
 import {
   Button,
   ButtonGroup,
-  Card,
   Container,
   Row,
   Col,
-  Accordion,
-  ListGroup,
-  InputGroup,
-  FormControl,
 } from "react-bootstrap";
-import { FcLike } from "react-icons/fc";
 import Barchart from "./Barchart";
 
 const PassiveInfo = (props: any) => {
