@@ -1,4 +1,5 @@
 import React from "react"
+import { Form } from "react-bootstrap";
 import { RouteComponentProps } from "react-router-dom";
 import { apiEndpointUrl } from "../../constants";
 import '../../css/EditMeme.css'
@@ -302,8 +303,10 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         }
     }
 
-    private setPrivate(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-        this.setState({ isPrivate: true });
+    private setPrivate(event: any) {
+        const isPrivate = !this.state.isPrivate;
+
+        this.setState({ isPrivate });
     }
 
     render() {
@@ -330,7 +333,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
                         <br />
                         <button onClick={this.showAddImageModal}>Add Image</button>
                         <br />
-                        <button onClick={this.setPrivate}>set to private</button>
+                        <Form.Check type="checkbox" checked={this.state.isPrivate} onClick={this.setPrivate} label="private"/>
                         <button onClick={this.onCreateOnServer}>Create on Server</button>
                         <button onClick={this.onCreateLocally}>Create locally and download</button>
                     </div>
