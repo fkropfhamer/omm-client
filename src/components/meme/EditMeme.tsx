@@ -9,6 +9,8 @@ import PopularTemplateSelector from "./TemplateSelector";
 import TextEditor from "./TextEditor"
 import DescribeButton from "../../util/DescribeButton";
 import VoiceControlButton from "../VoiceControlButton";
+import imageCompression from 'browser-image-compression';
+
 
 interface Text {
     text: string,
@@ -32,6 +34,7 @@ interface State {
     canvasHeight: number,
     texts: Text[],
     isPrivate: boolean,
+    maxSize: number,
 }
 
 export default class EditMeme extends React.Component<RouteComponentProps<RouteParams>, State> {
@@ -73,6 +76,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
             imgWidth: 0,
             imgHeight: 0,
             isPrivate: false,
+            maxSize: 2,
         }
 
         this.drawMeme = this.drawMeme.bind(this);
@@ -86,6 +90,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         this.addImageToMeme = this.addImageToMeme.bind(this);
         this.setPrivate = this.setPrivate.bind(this);
         this.onSpeech = this.onSpeech.bind(this);
+        this.onMaxSizeChange = this.onMaxSizeChange.bind(this);
     }
 
     async componentDidMount() {
@@ -153,9 +158,18 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         this.props.history.push('/meme/show/' + json.data.id)
     }
 
-    private downloadPNG(filename = 'canvas.png') {
-        const dataURL = this.canvas.current.toDataURL('image/png');
-        EditMeme.downloadURI(dataURL, filename);
+    private async downloadPNG(filename = 'canvas.png') {
+        this.canvas.current.toBlob(async (b: File) => {
+            const compressed = await imageCompression(b, {maxSizeMB: this.state.maxSize})
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                if (e.target) {
+                    EditMeme.downloadURI(e.target.result as string, filename)
+                }
+            };
+            reader.readAsDataURL(compressed);
+        }, 'image/png');
     }
 
     private static downloadURI(uri: string, name: string) {
@@ -335,20 +349,29 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         }
     }
 
+    private onMaxSizeChange(event:  React.ChangeEvent<HTMLInputElement>) {
+        let value = parseInt(event.target.value);
+        if (value < 1) {
+            value = 1;
+        }
+
+        this.setState({maxSize: value});
+    }
+
     render() {
         return (
             <div>
                 <div id="container">
-                    <canvas width={this.state.canvasWidth} height={this.state.canvasHeight} ref={this.canvas}></canvas>
+                    <canvas width={this.state.canvasWidth} height={this.state.canvasHeight} ref={this.canvas} />
 
                     <div id="editArea">
 
-                        <PopularTemplateSelector onChangeTemplate={(imgUrl) => this.changeTemplate(imgUrl) }></PopularTemplateSelector>
+                        <PopularTemplateSelector onChangeTemplate={(imgUrl) => this.changeTemplate(imgUrl) } />
                         <br/>
 
                         <label htmlFor="name">Name</label>
                         <span>
-                            <input id="name" value={this.state.name} type="text" onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.setState({name: event.target.value})}></input>
+                            <input id="name" value={this.state.name} type="text" onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.setState({name: event.target.value})} />
                             <DictateButton onSpeech={(text) => this.setState({name: text})}/>
                         </span>
                         <br/>
@@ -364,12 +387,12 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
                         <br />
                         <Form.Check type="checkbox" checked={this.state.isPrivate} onChange={this.setPrivate} label="private"/>
                         <button onClick={this.onCreateOnServer}>Create on Server</button>
-                        <button onClick={this.onCreateLocally}>Create locally and download</button>
+                        <button onClick={this.onCreateLocally}>Create locally and download</button><input type="number" value={this.state.maxSize} onChange={this.onMaxSizeChange}/>max size in MB <br/>
                         <DescribeButton url={decodeURIComponent(this.props.match.params.url)} />
                     </div>
                 </div>
                 <AddImageModal title={"Choose the positon of new Image relative to current Image"}
-                        ref={this.addImageModal} addImageToMeme={(position,file) => this.addImageToMeme(position ,file)}></AddImageModal>
+                        ref={this.addImageModal} addImageToMeme={(position,file) => this.addImageToMeme(position ,file)} />
                 <VoiceControlButton onSpeech={this.onSpeech} />
             </div>
         )
