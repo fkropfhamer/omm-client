@@ -6,6 +6,7 @@ import UploadTemplate from "./UploadTemplate";
 import UrlScreenshotTemplate from "./UrlScreenshotTemplate";
 import PopularTemplateSelector from "../meme/TemplateSelector";
 
+import CameraPhotoTemplate from "./CameraPhotoTemplate";
 
 
 export default class CreateTemplate extends React.Component<RouteComponentProps> {
@@ -21,6 +22,7 @@ export default class CreateTemplate extends React.Component<RouteComponentProps>
                     const encodedUrl = encodeURIComponent(url);
                     this.props.history.push('/meme/edit/' + encodedUrl);
                 }} />
+                <CameraPhotoTemplate {...this.props} />
             </div>
         );
     }

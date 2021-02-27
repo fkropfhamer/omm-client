@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import '../../css/AddImageModal.css';
 import { RadioGroup, Radio, FormControlLabel } from '@material-ui/core';
+import { Modal } from 'react-bootstrap';
 
 interface Props {
     title: string
@@ -28,7 +29,7 @@ class AddImageModal extends Component<Props, State> {
         this.closeModal = this.closeModal.bind(this)
         this.handleChange = this.handleChange.bind(this);
     }
-    
+
     componentDidMount() {
         this.setState({ visible: false })
     }
@@ -36,13 +37,13 @@ class AddImageModal extends Component<Props, State> {
     private confirm() {
         this.props.addImageToMeme(this.state.addPosition, this.fileInput.current.files[0])
         this.setState({ visible: false })
-    }    
+    }
 
     private closeModal() {
         this.setState({ visible: false })
     }
-    
-      
+
+
     private handleChange(event: React.ChangeEvent<HTMLInputElement>) {
         this.setState({addPosition: event.target.value});
     }
@@ -51,8 +52,8 @@ class AddImageModal extends Component<Props, State> {
         const { visible } = this.state;
         const { title } = this.props;
 
-        return visible && <div className="modal-wrapper">
-            <div className="modal">
+        return visible &&
+            <Modal show={visible}>
                 <div className="modal-title">{title}</div>
 
                 <RadioGroup aria-label="Position" name="position-radioGroup" value={this.state.addPosition} onChange={this.handleChange}>
@@ -68,9 +69,7 @@ class AddImageModal extends Component<Props, State> {
                     <button className="modal-operator-close" onClick={this.closeModal}>cancel</button>
                     <button className="modal-operator-confirm" onClick={this.confirm}>confirm</button>
                 </div>
-                </div>
-                <div className="mask"></div>
-            </div>
+            </Modal>
     }
 }
 
