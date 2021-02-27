@@ -1,17 +1,10 @@
 import {
   Button,
-  ButtonGroup,
   Card,
   Container,
   Row,
   Col,
-  Accordion,
-  ListGroup,
-  InputGroup,
-  FormControl,
 } from "react-bootstrap";
-import { FcLike } from "react-icons/fc";
-import Barchart from "./Barchart";
 import PassiveInfo from "./PassiveInfo";
 
 export interface MemeObject {
@@ -53,8 +46,6 @@ export default function Meme(props: Props) {
     fileformat,
     votes,
     comments,
-    //tags,
-    createdAt,
   } = props.meme;
 
   console.log(votes.length, views, comments.length);
