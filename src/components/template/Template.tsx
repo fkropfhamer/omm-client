@@ -1,11 +1,14 @@
-export interface MemeObject {
+import React from "react";
+import { Link } from "react-router-dom";
+
+export interface TemplateObject {
     url: string,
-    name: string,
+    id: string,
     views: number,
 }
 
 interface Props {
-    meme: MemeObject
+    template: TemplateObject
 }
 
 async function toDataURL(url: string) {
@@ -25,15 +28,15 @@ async function download(url: string, name: string) {
     document.body.removeChild(a);
 }
 
-export default function Meme(props: Props) {
-    const {name, url, views} = props.meme;
+export default function Template(props: Props) {
+    const {id, url, views} = props.template;
 
     return <div>
-        <h1>{name}</h1>
-        <img src={url} alt={'meme with name "'+ name + '".'}></img>
+        <img src={url} alt={'meme with id "'+ id + '".'}></img>
         <h1>Views: {views}</h1>
         <button onClick={()=> {
-            download(url, name);
+            download(url, 'template-' + id + '.png');
         }}>download</button>
+        <Link to={'/meme/edit/' + id}>create Meme from this template.</Link>
     </div>
 }
