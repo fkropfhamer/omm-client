@@ -44,6 +44,7 @@ import {
 } from 'react-share';
 import {useState} from "react";
 
+import PassiveInfo from "./PassiveInfo";
 
 export interface MemeObject {
     url: string;
@@ -60,7 +61,6 @@ interface Props {
     meme: MemeObject;
 }
 
-
 async function toDataURL(url: string) {
     const response = await fetch(url);
     const blob = await response.blob();
@@ -76,7 +76,6 @@ async function download(url: string, name: string) {
     a.click();
     document.body.removeChild(a);
 }
-
 
 export default function Meme(props: Props) {
     const {
@@ -142,10 +141,13 @@ export default function Meme(props: Props) {
                                             <ButtonGroup className="mr-2" size="sm">
                                                 <Button
                                                     variant="success">Views:{views}</Button>{" "}
-                                                <Button variant="success">
-                                                    fileformat:{fileformat}
-                                                </Button>{" "}
                                             </ButtonGroup>
+                                            <PassiveInfo
+                                                views={views}
+                                                comments={comments}
+                                                votes={votes}
+                                                fileformat={fileformat}
+                                            />
                                             <Button
                                                 variant="info"
                                                 onClick={() => {

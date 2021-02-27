@@ -16,7 +16,7 @@ interface State {
   imgComments: string[];
   imgVotes: string[];
   imgTags: string[];
-  imgCreatedAt: Date;
+  imgCreatedAt: any;
 }
 
 export default class ShowMeme extends React.Component<
@@ -35,7 +35,7 @@ export default class ShowMeme extends React.Component<
       imgComments: [],
       imgVotes: [],
       imgTags: [],
-      imgCreatedAt: new Date(),
+      imgCreatedAt: "",
     };
   }
 
