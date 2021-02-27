@@ -91,5 +91,6 @@ Run the corresponding docker container after it is build.
 | react-webcam | MIT | Webcam component for React. | https://www.npmjs.com/package/react-webcam |
 | recharts | MIT | Recharts is a Redefined chart library built with React and D3. | https://www.npmjs.com/package/recharts | 
 | react-share | MIT | Social media share buttons and share counts for React. | https://www.npmjs.com/package/react-share |
+| browser-image-compression | MIT | Javascript module to be run in the web browser for image compression. | https://www.npmjs.com/package/browser-image-compression |
 
 Additionally the corresponding typescript types from https://github.com/DefinitelyTyped/DefinitelyTyped and the corresponding testing libraries from https://testing-library.com/. 
