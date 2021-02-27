@@ -26,7 +26,8 @@ interface State {
     imgHeight: number,
     canvasWidth: number,
     canvasHeight: number,
-    texts: Text[]
+    texts: Text[],
+    isPrivate: boolean,
 }
 
 export default class EditMeme extends React.Component<RouteComponentProps<RouteParams>, State> {
@@ -66,7 +67,8 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
             canvasWidth: 500,
             canvasHeight: 500,
             imgWidth: 0,
-            imgHeight: 0
+            imgHeight: 0,
+            isPrivate: false,
         }
 
         this.drawMeme = this.drawMeme.bind(this);
@@ -78,6 +80,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         this.removeText = this.removeText.bind(this);
         this.showAddImageModal = this.showAddImageModal.bind(this);
         this.addImageToMeme = this.addImageToMeme.bind(this);
+        this.setPrivate = this.setPrivate.bind(this);
     }
 
     async componentDidMount() {
@@ -130,6 +133,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
                 bottom: this.state.texts[0].text,
                 top: this.state.texts[1].text,
                 name: this.state.name,
+                isPrivate: this.state.isPrivate,
             }),
             headers: {
                 'Content-Type': 'application/json'
@@ -280,7 +284,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
                 }
             }
         } catch(err) {
-            console.log("No File Uplode");
+            console.log("No File Uploaded");
         }
 
     }
@@ -296,6 +300,10 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
             this.setState({img: img})
             this.drawMeme();
         }
+    }
+
+    private setPrivate(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+        this.setState({ isPrivate: true });
     }
 
     render() {
@@ -322,6 +330,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
                         <br />
                         <button onClick={this.showAddImageModal}>Add Image</button>
                         <br />
+                        <button onClick={this.setPrivate}>set to private</button>
                         <button onClick={this.onCreateOnServer}>Create on Server</button>
                         <button onClick={this.onCreateLocally}>Create locally and download</button>
                     </div>
