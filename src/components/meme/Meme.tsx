@@ -1,5 +1,5 @@
 import classify from "../../util/imageClassification";
-import textToSpeech from "../../util/textToSpeech";
+import textToSpeech, {describeImage} from "../../util/textToSpeech";
 
 import {
     Button,
@@ -48,6 +48,7 @@ import {
 import {useState} from "react";
 
 import PassiveInfo from "./PassiveInfo";
+import DescribeButton from "../../util/DescribeButton";
 
 export interface MemeObject {
     url: string;
@@ -120,20 +121,6 @@ export default function Meme(props: Props) {
         setDislike(dislikes + 1);
         makeDislikeActive(true);
         console.log("DISLIKE" + dislikes);
-    }
-
-    function describe() {
-        const img = new Image();
-        img.crossOrigin = "anonymous";
-        img.onload = () => {
-            console.log(img)
-            classify(img).then((p) => {
-                console.log(p);
-                textToSpeech(`I think this image shows ${p.map(a => a.className).join(" or ")}`);
-            });
-
-        }
-        img.src = url;
     }
 
     return (
@@ -330,7 +317,7 @@ export default function Meme(props: Props) {
                             </Card>
                         </Col>
                         <Col>
-                            <Button onClick={describe}>describe</Button>
+                            <DescribeButton name={name} url={url}/>
                         </Col>
                     </Row>
                 </Container>

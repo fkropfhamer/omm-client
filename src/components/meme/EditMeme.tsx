@@ -6,6 +6,7 @@ import '../../css/EditMeme.css'
 import AddImageModal from "./AddImageModal";
 import PopularTemplateSelector from "./TemplateSelector";
 import TextEditor from "./TextEditor"
+import DescribeButton from "../../util/DescribeButton";
 
 interface Text {
     text: string,
@@ -336,10 +337,12 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
                         <Form.Check type="checkbox" checked={this.state.isPrivate} onClick={this.setPrivate} label="private"/>
                         <button onClick={this.onCreateOnServer}>Create on Server</button>
                         <button onClick={this.onCreateLocally}>Create locally and download</button>
+                        <DescribeButton url={decodeURIComponent(this.props.match.params.url)} />
                     </div>
                 </div>
                 <AddImageModal title={"Choose the positon of new Image relative to current Image"}
                         ref={this.addImageModal} addImageToMeme={(position,file) => this.addImageToMeme(position ,file)}></AddImageModal>
+
             </div>
         )
     }
