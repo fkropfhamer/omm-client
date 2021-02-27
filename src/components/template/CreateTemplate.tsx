@@ -6,6 +6,7 @@ import UploadTemplate from "./UploadTemplate";
 import UrlScreenshotTemplate from "./UrlScreenshotTemplate";
 import PopularTemplateSelector from "../meme/TemplateSelector";
 import CameraPhotoTemplate from "./CameraPhotoTemplate";
+import UserUrlTemplate from "./UserUrlTemplate";
 
 
 export default class CreateTemplate extends React.Component<RouteComponentProps> {
@@ -15,6 +16,7 @@ export default class CreateTemplate extends React.Component<RouteComponentProps>
                 <h1>Create meme</h1>
                 <UploadTemplate {...this.props} />
                 <UrlScreenshotTemplate {...this.props} />
+                <UserUrlTemplate {...this.props} />
                 <DrawTemplate {...this.props} />
                 <h1>Popular Templates for <a href="https://imgflip.com/">imgflip</a></h1>
                 <PopularTemplateSelector onChangeTemplate={(url) => {
