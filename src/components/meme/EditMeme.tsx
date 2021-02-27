@@ -3,10 +3,12 @@ import { Form } from "react-bootstrap";
 import { RouteComponentProps } from "react-router-dom";
 import { apiEndpointUrl } from "../../constants";
 import '../../css/EditMeme.css'
+import DictateButton from "../DictateButton";
 import AddImageModal from "./AddImageModal";
 import PopularTemplateSelector from "./TemplateSelector";
 import TextEditor from "./TextEditor"
 import DescribeButton from "../../util/DescribeButton";
+import VoiceControlButton from "../VoiceControlButton";
 
 interface Text {
     text: string,
@@ -83,6 +85,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         this.showAddImageModal = this.showAddImageModal.bind(this);
         this.addImageToMeme = this.addImageToMeme.bind(this);
         this.setPrivate = this.setPrivate.bind(this);
+        this.onSpeech = this.onSpeech.bind(this);
     }
 
     async componentDidMount() {
@@ -126,7 +129,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         });
     }
 
-    private async onCreateOnServer(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    private async onCreateOnServer(event?: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
 
         const res = await fetch(apiEndpointUrl + 'meme', {
             method: 'POST',
@@ -164,7 +167,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         document.body.removeChild(link);
     }
 
-    private onCreateLocally(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    private onCreateLocally(event?: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         if (this.state.name !== '') {
             this.downloadPNG(this.state.name + '.png')
         }
@@ -310,6 +313,28 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         this.setState({ isPrivate });
     }
 
+    private onSpeech(result: string) {
+        if (result.includes('add') && result.includes('text')) {
+            this.addText();
+        }
+
+        if (result.includes('add') && result.includes('image')) {
+            this.showAddImageModal();
+        }
+
+        if (result.includes('remove') && result.includes('text')) {
+            this.removeText(this.state.texts.length - 1);
+        }
+
+        if (result.includes('create') && result.includes('server')) {
+            this.onCreateOnServer();
+        }
+
+        if ((result.includes('create') && (result.includes('local') || result.includes('locally'))) || result.includes('download')) {
+            this.onCreateLocally();
+        }
+    }
+
     render() {
         return (
             <div>
@@ -322,7 +347,10 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
                         <br/>
 
                         <label htmlFor="name">Name</label>
-                        <span><input id="name" type="text" onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.setState({name: event.target.value})}></input></span>
+                        <span>
+                            <input id="name" value={this.state.name} type="text" onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.setState({name: event.target.value})}></input>
+                            <DictateButton onSpeech={(text) => this.setState({name: text})}/>
+                        </span>
                         <br/>
 
                         {this.state.texts.map((text, idx) =>
@@ -334,7 +362,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
                         <br />
                         <button onClick={this.showAddImageModal}>Add Image</button>
                         <br />
-                        <Form.Check type="checkbox" checked={this.state.isPrivate} onClick={this.setPrivate} label="private"/>
+                        <Form.Check type="checkbox" checked={this.state.isPrivate} onChange={this.setPrivate} label="private"/>
                         <button onClick={this.onCreateOnServer}>Create on Server</button>
                         <button onClick={this.onCreateLocally}>Create locally and download</button>
                         <DescribeButton url={decodeURIComponent(this.props.match.params.url)} />
@@ -342,7 +370,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
                 </div>
                 <AddImageModal title={"Choose the positon of new Image relative to current Image"}
                         ref={this.addImageModal} addImageToMeme={(position,file) => this.addImageToMeme(position ,file)}></AddImageModal>
-
+                <VoiceControlButton onSpeech={this.onSpeech} />
             </div>
         )
     }
