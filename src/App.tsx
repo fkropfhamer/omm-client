@@ -34,9 +34,8 @@ function App() {
           <MemeOverview />
         </Route>
         <Route
-          path="/meme/edit/:id"
-          render={(props) => <EditMeme {...props} />}
-        />
+            path="/meme/edit/:url"
+            render={(props) => <EditMeme {...props}/>}/>
         <Route
           path="/meme/show/:id"
           render={(props) => <ShowMeme {...props} />}
