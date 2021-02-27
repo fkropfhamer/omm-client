@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { MdKeyboardVoice } from "react-icons/md";
 import SpeechRecognitionButton from "./SpeechRecognitionButton";
 
