@@ -24,7 +24,7 @@ function App() {
         <Route path="/template/create" render={(props) => <CreateTemplate {...props} />}/>
         <Route path="/meme/slideshow"><MemeSlideShow/></Route>
         <Route path="/meme/overview"><MemeOverview/></Route>
-        <Route path="/meme/edit/:id" render={(props) => <EditMeme {...props}/>}/>
+        <Route path="/meme/edit/:url" render={(props) => <EditMeme {...props}/>}/>
         <Route path="/meme/show/:id" render={(props) => <ShowMeme {...props}/>}/>
         <Route path="/template/show/:id" render={(props) => <ShowTemplate {...props} />} />
         <Route path="/">

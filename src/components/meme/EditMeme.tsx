@@ -16,7 +16,7 @@ interface Text {
     hexColor: string
 }
 
-interface RouteParams {id: string}
+interface RouteParams {url: string}
 
 interface State {
     name: string,
@@ -84,16 +84,13 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         const canvas = this.canvas.current;
         const ctx = this.canvas.current.getContext('2d');
 
-        const id = this.props.match.params.id;
+        const { url } = this.props.match.params;
 
-        const res = await fetch(apiEndpointUrl + 'template/?id=' + id);
-        const json = await res.json();
+        console.log(url);
 
-        this.setState({imgUrl: json.data.template.url})
-        
         const img = new Image();
         img.crossOrigin = "anonymous";
-        img.src = this.state.imgUrl;
+        img.src = decodeURIComponent(url);
         img.onload = () => {
             this.setState({imgWidth: img.width})
             this.setState({imgHeight: img.height})
@@ -108,9 +105,9 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
 
         ctx.textAlign = "center";
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
+
         ctx.drawImage(this.state.img, 0, 0, canvas.width, canvas.height)
-        
+
         this.drawTexts();
     }
 
@@ -129,7 +126,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         const res = await fetch(apiEndpointUrl + 'meme', {
             method: 'POST',
             body: JSON.stringify({
-                url: this.state.imgUrl,
+                url: decodeURIComponent(this.props.match.params.url),
                 bottom: this.state.texts[0].text,
                 top: this.state.texts[1].text,
                 name: this.state.name,
@@ -198,7 +195,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         this.addImageModal.current.setState({visible: true});
     }
 
-    private addImageToMeme(position: string, file: File ) {        
+    private addImageToMeme(position: string, file: File ) {
         let reader = new FileReader();
         let newImgHeight: number;
         let newImgWidth: number;
@@ -207,19 +204,20 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
             reader.readAsDataURL(file);
             reader.onload = (event: Event) => {
                 let newImg = new Image();
+                newImg.crossOrigin = "anonymous";
                 newImg.src = reader.result as string;
-    
+
                 newImg.onload = (event: Event) => {
                     newImgHeight = newImg.height;
                     newImgWidth = newImg.width;
-    
+
                     if(position === "left") {
                         const canvas = this.canvas.current;
                         const ctx = this.canvas.current.getContext('2d');
-            
+
                         ctx.textAlign = "center";
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
+
                         //TODO: Does the height need to be scaled equally
                         let widthPercent = newImgWidth / (this.state.imgWidth + newImgWidth)
 
@@ -228,14 +226,14 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
                         ctx.drawImage(newImg, 0, 0, widthPercent * canvas.width, canvas.height)
                         ctx.drawImage(this.state.img, widthPercent * canvas.width, 0, (1 - widthPercent) * canvas.width, canvas.height)
                     }
-            
+
                     else if(position === "right") {
                         const canvas = this.canvas.current;
                         const ctx = this.canvas.current.getContext('2d');
-            
+
                         ctx.textAlign = "center";
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
+
                         //TODO: Does the height need to be scaled equally
                         let widthPercent = this.state.imgWidth / (this.state.imgWidth + newImgWidth)
 
@@ -246,26 +244,26 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
                     }
                     else if(position === "above") {
                         this.setState({canvasHeight: this.state.canvasHeight + newImgHeight})
-    
+
                         const canvas = this.canvas.current;
                         const ctx = this.canvas.current.getContext('2d');
-            
+
                         ctx.textAlign = "center";
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
+
                         ctx.drawImage(newImg, 0, 0, canvas.width, newImgHeight)
                         ctx.drawImage(this.state.img, 0, newImgHeight, canvas.width, canvas.height-newImgHeight)
                     }
                     else if(position === "below") {
                         let oldCanvasHeight = this.state.canvasHeight;
                         this.setState({canvasHeight: this.state.canvasHeight + newImgHeight})
-    
+
                         const canvas = this.canvas.current;
                         const ctx = this.canvas.current.getContext('2d');
-            
+
                         ctx.textAlign = "center";
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
+
                         ctx.drawImage(this.state.img, 0, 0, canvas.width, oldCanvasHeight)
                         ctx.drawImage(newImg, 0, oldCanvasHeight, canvas.width, newImgHeight)
                     }
@@ -280,7 +278,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
 
                     this.drawTexts();
                 }
-            } 
+            }
         } catch(err) {
             console.log("No File Uplode");
         }
@@ -289,6 +287,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
 
     private changeTemplate(imgUrl: string) {
         const img = new Image();
+        img.crossOrigin = 'anonymous';
         img.src = imgUrl;
         img.onload = () => {
             this.setState({imgUrl: imgUrl});
@@ -302,7 +301,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
     render() {
         return (
             <div>
-                <div id="container"> 
+                <div id="container">
                     <canvas width={this.state.canvasWidth} height={this.state.canvasHeight} ref={this.canvas}></canvas>
 
                     <div id="editArea">
@@ -317,7 +316,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
                         {this.state.texts.map((text, idx) =>
                             (<TextEditor key={idx} text={text} onChange={(text) => {this.onTextChange(idx, text)}} onRemove={() => this.removeText(idx) }/>)
                         )}
-                        
+
                         <br />
                         <button onClick={this.addText}>Add Text</button>
                         <br />
@@ -327,7 +326,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
                         <button onClick={this.onCreateLocally}>Create locally and download</button>
                     </div>
                 </div>
-                <AddImageModal title={"Choose the positon of new Image relative to current Image"} 
+                <AddImageModal title={"Choose the positon of new Image relative to current Image"}
                         ref={this.addImageModal} addImageToMeme={(position,file) => this.addImageToMeme(position ,file)}></AddImageModal>
             </div>
         )
