@@ -5,7 +5,6 @@ import DrawTemplate from "./DrawTemplate";
 import UploadTemplate from "./UploadTemplate";
 import UrlScreenshotTemplate from "./UrlScreenshotTemplate";
 import PopularTemplateSelector from "../meme/TemplateSelector";
-
 import CameraPhotoTemplate from "./CameraPhotoTemplate";
 
 
