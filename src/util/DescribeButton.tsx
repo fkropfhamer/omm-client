@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from 'react-bootstrap';
-import {describeImage} from "./textToSpeech";
+import { describeImage } from "./textToSpeech";
 
 interface Props {
     name?: string,

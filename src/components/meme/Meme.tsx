@@ -1,6 +1,3 @@
-import classify from "../../util/imageClassification";
-import textToSpeech, {describeImage} from "../../util/textToSpeech";
-
 import {
     Button,
     ButtonGroup,
