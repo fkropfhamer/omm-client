@@ -45,6 +45,7 @@ import {
 import {useState} from "react";
 
 import PassiveInfo from "./PassiveInfo";
+import DescribeButton from "../../util/DescribeButton";
 
 export interface MemeObject {
     url: string;
@@ -66,6 +67,7 @@ async function toDataURL(url: string) {
     const blob = await response.blob();
 
     return URL.createObjectURL(blob);
+
 }
 
 async function download(url: string, name: string) {
@@ -108,7 +110,6 @@ export default function Meme(props: Props) {
        console.log(name);
     }
     const handleDisike = () => {
-
         if (likeActive) {
             setLike(likes - 1);
             makeLikeActive(false);
@@ -118,6 +119,7 @@ export default function Meme(props: Props) {
         makeDislikeActive(true);
         console.log("DISLIKE" + dislikes);
     }
+
     return (
         <div>
             <div>
@@ -311,7 +313,9 @@ export default function Meme(props: Props) {
                                 </Card.Body>
                             </Card>
                         </Col>
-                        <Col></Col>
+                        <Col>
+                            <DescribeButton name={name} url={url}/>
+                        </Col>
                     </Row>
                 </Container>
             </div>
