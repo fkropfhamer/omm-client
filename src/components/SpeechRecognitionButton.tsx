@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import { Button } from 'react-bootstrap';
 
 interface Props {
     onSpeech: (recognition: string) => void
@@ -42,5 +43,5 @@ export default function SpeechRecognitionButton(props: Props) {
     }
 
 
-    return <button disabled={isRecording} onClick={onClick}>{props.children}</button>;
+    return <Button disabled={isRecording} onClick={onClick}>{props.children}</Button>;
 }

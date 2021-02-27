@@ -47,9 +47,8 @@ function App() {
         <Route path="/login" render={props => <Login {...props} />} />
         <Route path="/register" render={props => <Register {...props} />} />
         <Route path="/profile/:jwt" render={props => <Profile {...props} />} />
-        <Route path="/">
-          <Home />
-        </Route>
+        <Route path="/" render={props => <Home {...props} />}/>
+          
       </Switch>
     </Router>
   );

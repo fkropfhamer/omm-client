@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import {apiEndpointUrl} from "../../constants";
 import Meme from "./Meme";
 import {Button, Col, Dropdown, Row} from "react-bootstrap";
+import VoiceControlButton from '../VoiceControlButton';
 
 
 export default function MemeSlideShow() {
@@ -27,6 +28,20 @@ export default function MemeSlideShow() {
 
     function onNext() {
         setCurrentMemeIndex((currentMemeIndex + 1) % memes.length);
+    }
+
+    function onSpeech(result: string) {
+        if (result.includes('previous')) {
+            onPrev();
+        }
+
+        if (result.includes('next')) {
+            onNext();
+        }
+
+        if (result.includes('random')) {
+            onRandom();
+        }
     }
 
 
@@ -109,10 +124,10 @@ export default function MemeSlideShow() {
                     </Row>
                 </div>
                 <Meme meme={currentMeme}/>
+                <VoiceControlButton onSpeech={onSpeech} />
                 <button onClick={onPrev}>pref</button>
                 <button onClick={onNext}>next</button>
                 <button onClick={onRandom}>random</button>
-
             </div> : 'loading'}
     </div>
 }

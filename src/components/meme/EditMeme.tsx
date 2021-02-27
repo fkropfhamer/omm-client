@@ -8,6 +8,7 @@ import AddImageModal from "./AddImageModal";
 import PopularTemplateSelector from "./TemplateSelector";
 import TextEditor from "./TextEditor"
 import DescribeButton from "../../util/DescribeButton";
+import VoiceControlButton from "../VoiceControlButton";
 
 interface Text {
     text: string,
@@ -84,6 +85,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         this.showAddImageModal = this.showAddImageModal.bind(this);
         this.addImageToMeme = this.addImageToMeme.bind(this);
         this.setPrivate = this.setPrivate.bind(this);
+        this.onSpeech = this.onSpeech.bind(this);
     }
 
     async componentDidMount() {
@@ -127,7 +129,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         });
     }
 
-    private async onCreateOnServer(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    private async onCreateOnServer(event?: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
 
         const res = await fetch(apiEndpointUrl + 'meme', {
             method: 'POST',
@@ -165,7 +167,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         document.body.removeChild(link);
     }
 
-    private onCreateLocally(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    private onCreateLocally(event?: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         if (this.state.name !== '') {
             this.downloadPNG(this.state.name + '.png')
         }
@@ -311,6 +313,28 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         this.setState({ isPrivate });
     }
 
+    private onSpeech(result: string) {
+        if (result.includes('add') && result.includes('text')) {
+            this.addText();
+        }
+
+        if (result.includes('add') && result.includes('image')) {
+            this.showAddImageModal();
+        }
+
+        if (result.includes('remove') && result.includes('text')) {
+            this.removeText(this.state.texts.length - 1);
+        }
+
+        if (result.includes('create') && result.includes('server')) {
+            this.onCreateOnServer();
+        }
+
+        if ((result.includes('create') && (result.includes('local') || result.includes('locally'))) || result.includes('download')) {
+            this.onCreateLocally();
+        }
+    }
+
     render() {
         return (
             <div>
@@ -346,7 +370,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
                 </div>
                 <AddImageModal title={"Choose the positon of new Image relative to current Image"}
                         ref={this.addImageModal} addImageToMeme={(position,file) => this.addImageToMeme(position ,file)}></AddImageModal>
-
+                <VoiceControlButton onSpeech={this.onSpeech} />
             </div>
         )
     }
