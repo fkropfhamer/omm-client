@@ -140,8 +140,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
             method: 'POST',
             body: JSON.stringify({
                 url: decodeURIComponent(this.props.match.params.url),
-                bottom: this.state.texts[0].text,
-                top: this.state.texts[1].text,
+                texts: this.state.texts,
                 name: this.state.name,
                 isPrivate: this.state.isPrivate,
             }),
