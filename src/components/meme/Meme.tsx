@@ -46,13 +46,17 @@ import {useState} from "react";
 
 import PassiveInfo from "./PassiveInfo";
 import DescribeButton from "../../util/DescribeButton";
+import {apiEndpointUrl} from "../../constants";
 
 export interface MemeObject {
     url: string;
     name: string;
+    id: string;
     views: number;
     fileformat: string;
     votes: string[];
+    likes: number;
+    dislikes: number;
     comments: string[];
     tags: string[];
     createdAt: Date;
@@ -83,9 +87,12 @@ export default function Meme(props: Props) {
     const {
         name,
         url,
+        id,
         views,
         fileformat,
         votes,
+        likes,
+        dislikes,
         comments,
         //tags,
         createdAt,
@@ -93,34 +100,62 @@ export default function Meme(props: Props) {
 
     const [likeActive, makeLikeActive] = useState(false);
     const [dislikeActive, makeDislikeActive] = useState(false);
-    const [likes, setLike] = useState(0);
-    const [dislikes, setDislike] = useState(0);
+    const [incrementLikes, setLike] = useState(0);
+    const [incrementDislikes, setDislike] = useState(0);
     console.log(createdAt);
 
     const handleLike = () => {
 
         if (dislikeActive) {
-            setDislike(dislikes - 1);
+            setDislike(incrementDislikes - 1);
             makeDislikeActive(false);
         } else {
         }
-        setLike(likes + 1);
+        setLike(incrementLikes + 1);
         makeLikeActive(true);
-        console.log("LIKE" + likes);
+        console.log("LIKE" + incrementLikes);
        console.log(name);
     }
-    const handleDisike = () => {
+    const handleDislike = () => {
         if (likeActive) {
-            setLike(likes - 1);
+            setLike(incrementLikes - 1);
             makeLikeActive(false);
         } else {
         }
-        setDislike(dislikes + 1);
+        setDislike(incrementDislikes + 1);
         makeDislikeActive(true);
-        console.log("DISLIKE" + dislikes);
-    }
+        console.log("DISLIKE" + incrementDislikes);
 
-    return (
+    }
+    function updateVotes() {
+
+
+    fetch(apiEndpointUrl + "meme?id=" + id, {
+      //  fetch( "http://localhost:8000/api/v1/meme?id=b6ca4e4c-f306-4a69-a50e-04e7ef361452",{
+        method: 'PUT',
+        headers: {
+            Accept: 'application/json',
+            //'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            likes: likes+5,
+            dislikes: dislikes + incrementDislikes,
+        }),
+    })
+        .then((response) => response.json())
+        .then((responseJson) => {
+            alert(responseJson)
+        })
+        .catch((error) => {
+            console.error(error)
+        })
+    }
+    console.log('id is'+id);
+    console.log(apiEndpointUrl);
+
+
+
+return (
         <div>
             <div>
                 <Container fluid="md">
@@ -205,13 +240,15 @@ export default function Meme(props: Props) {
                                                                     onClick={() => {
                                                                         if (!likeActive) {
                                                                             handleLike();
+                                                                            updateVotes();
                                                                         } else {
                                                                         }
                                                                     }}>LOVE IT
                                                                 too!  {likes}</Button>
                                                             <Button onClick={() => {
                                                                 if (!dislikeActive) {
-                                                                    handleDisike();
+                                                                    handleDislike();
+                                                                    updateVotes();
                                                                 } else {
                                                                 }
                                                             }}>DISLIKE it  {dislikes}</Button>
