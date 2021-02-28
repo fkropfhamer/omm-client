@@ -18,7 +18,7 @@ export default class UploadTemplate extends React.Component<RouteComponentProps>
 
         const data = new FormData();
         data.append("template", this.fileInput.current.files[0])
-        
+
         fetch(apiEndpointUrl + 'template', {
             method: "POST",
             body: data
@@ -26,10 +26,11 @@ export default class UploadTemplate extends React.Component<RouteComponentProps>
         .then(res => res.json())
         .then(json => {
             console.log(json);
-            this.props.history.push('/meme/edit/' + json.data.id)
+            const encodedUrl =  encodeURIComponent(apiEndpointUrl + 'template/image/' + json.data.id);
+            this.props.history.push('/meme/edit/' + encodedUrl);
         })
         .catch(err => console.log(err));
-    }    
+    }
 
     render() {
         return (
