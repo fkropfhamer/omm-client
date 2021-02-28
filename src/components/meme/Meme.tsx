@@ -98,62 +98,73 @@ export default function Meme(props: Props) {
         createdAt,
     } = props.meme;
 
-    const [likeActive, makeLikeActive] = useState(false);
-    const [dislikeActive, makeDislikeActive] = useState(false);
-    const [incrementLikes, setLike] = useState(0);
-    const [incrementDislikes, setDislike] = useState(0);
+    const [likeActive, setLikeActive] = useState(false);
+    const [dislikeActive, setDislikeActive] = useState(false);
+    const [incrementLikes, setIncrementLikes] = useState(likes);
+    const [incrementDislikes, setIncrementDislikes] = useState(dislikes);
+    const [incrementComments, setIncrementComments] = useState(comments);
+    const [comment, setComment] = useState("");
     console.log(createdAt);
 
     const handleLike = () => {
-
-        if (dislikeActive) {
-            setDislike(incrementDislikes - 1);
-            makeDislikeActive(false);
-        } else {
+        const data = {
+            id
         }
-        setLike(incrementLikes + 1);
-        makeLikeActive(true);
-        console.log("LIKE" + incrementLikes);
-       console.log(name);
+
+        setLikeActive(true);
+        setIncrementLikes(incrementLikes + 1);
+
+        fetch(apiEndpointUrl + 'meme/like', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+
+
     }
     const handleDislike = () => {
-        if (likeActive) {
-            setLike(incrementLikes - 1);
-            makeLikeActive(false);
-        } else {
+        const data = {
+            id
         }
-        setDislike(incrementDislikes + 1);
-        makeDislikeActive(true);
-        console.log("DISLIKE" + incrementDislikes);
 
-    }
-    function updateVotes() {
+        setDislikeActive(true);
+        setIncrementDislikes(incrementDislikes + 1);
 
-
-    fetch(apiEndpointUrl + "meme?id=" + id, {
-      //  fetch( "http://localhost:8000/api/v1/meme?id=b6ca4e4c-f306-4a69-a50e-04e7ef361452",{
-        method: 'PUT',
-        headers: {
-            Accept: 'application/json',
-            //'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            likes: likes+5,
-            dislikes: dislikes + incrementDislikes,
-        }),
-    })
-        .then((response) => response.json())
-        .then((responseJson) => {
-            alert(responseJson)
-        })
-        .catch((error) => {
-            console.error(error)
+        fetch(apiEndpointUrl + 'meme/dislike', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
         })
     }
+
     console.log('id is'+id);
     console.log(apiEndpointUrl);
 
+    function handleComment() {
+        if (!comment) {
+            return
+        }
 
+        const data = {
+            id,
+            comment,
+        }
+
+        setIncrementComments([...incrementComments, comment]);
+        setComment("");
+
+        fetch(apiEndpointUrl + 'meme/comment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+    }
 
 return (
         <div>
@@ -181,7 +192,7 @@ return (
                                             </ButtonGroup>
                                             <PassiveInfo
                                                 views={views}
-                                                comments={comments}
+                                                comments={incrementComments}
                                                 votes={votes}
                                                 fileformat={fileformat}
                                             />
@@ -210,7 +221,7 @@ return (
                                                             <Accordion.Collapse eventKey="0">
                                                                 <Card.Body>
                                                                     <ListGroup>
-                                                                        {comments.map((comment, i) => {
+                                                                        {incrementComments.map((comment, i) => {
                                                                             return (
                                                                                 <ListGroup.Item
                                                                                     key={i}>
@@ -240,18 +251,14 @@ return (
                                                                     onClick={() => {
                                                                         if (!likeActive) {
                                                                             handleLike();
-                                                                            updateVotes();
-                                                                        } else {
                                                                         }
                                                                     }}>LOVE IT
-                                                                too!  {likes}</Button>
+                                                                too!  {incrementLikes}</Button>
                                                             <Button onClick={() => {
                                                                 if (!dislikeActive) {
                                                                     handleDislike();
-                                                                    updateVotes();
-                                                                } else {
                                                                 }
-                                                            }}>DISLIKE it  {dislikes}</Button>
+                                                            }}>DISLIKE it  {incrementDislikes}</Button>
                                                         </Card>
                                                     </Accordion>
                                                 </ButtonGroup>
@@ -264,7 +271,10 @@ return (
                                                         <FormControl
                                                             as="textarea"
                                                             aria-label="With textarea"
+                                                            value={comment}
+                                                            onChange={(e) => setComment(e.target.value)}
                                                         />
+                                                        <Button onClick={handleComment}>comment</Button>
                                                     </InputGroup>
                                                 </div>
                                             </Col>
