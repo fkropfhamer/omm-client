@@ -46,13 +46,17 @@ import {useState} from "react";
 
 import PassiveInfo from "./PassiveInfo";
 import DescribeButton from "../../util/DescribeButton";
+import {apiEndpointUrl} from "../../constants";
 
 export interface MemeObject {
     url: string;
     name: string;
+    id: string;
     views: number;
     fileformat: string;
     votes: string[];
+    likes: number;
+    dislikes: number;
     comments: string[];
     tags: string[];
     createdAt: Date;
@@ -83,44 +87,86 @@ export default function Meme(props: Props) {
     const {
         name,
         url,
+        id,
         views,
         fileformat,
         votes,
+        likes,
+        dislikes,
         comments,
         //tags,
         createdAt,
     } = props.meme;
 
-    const [likeActive, makeLikeActive] = useState(false);
-    const [dislikeActive, makeDislikeActive] = useState(false);
-    const [likes, setLike] = useState(0);
-    const [dislikes, setDislike] = useState(0);
+    const [likeActive, setLikeActive] = useState(false);
+    const [dislikeActive, setDislikeActive] = useState(false);
+    const [incrementLikes, setIncrementLikes] = useState(likes);
+    const [incrementDislikes, setIncrementDislikes] = useState(dislikes);
+    const [incrementComments, setIncrementComments] = useState(comments);
+    const [comment, setComment] = useState("");
     console.log(createdAt);
 
     const handleLike = () => {
-
-        if (dislikeActive) {
-            setDislike(dislikes - 1);
-            makeDislikeActive(false);
-        } else {
+        const data = {
+            id
         }
-        setLike(likes + 1);
-        makeLikeActive(true);
-        console.log("LIKE" + likes);
-       console.log(name);
+
+        setLikeActive(true);
+        setIncrementLikes(incrementLikes + 1);
+
+        fetch(apiEndpointUrl + 'meme/like', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+
+
     }
-    const handleDisike = () => {
-        if (likeActive) {
-            setLike(likes - 1);
-            makeLikeActive(false);
-        } else {
+    const handleDislike = () => {
+        const data = {
+            id
         }
-        setDislike(dislikes + 1);
-        makeDislikeActive(true);
-        console.log("DISLIKE" + dislikes);
+
+        setDislikeActive(true);
+        setIncrementDislikes(incrementDislikes + 1);
+
+        fetch(apiEndpointUrl + 'meme/dislike', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
     }
 
-    return (
+    console.log('id is'+id);
+    console.log(apiEndpointUrl);
+
+    function handleComment() {
+        if (!comment) {
+            return
+        }
+
+        const data = {
+            id,
+            comment,
+        }
+
+        setIncrementComments([...incrementComments, comment]);
+        setComment("");
+
+        fetch(apiEndpointUrl + 'meme/comment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+    }
+
+return (
         <div>
             <div>
                 <Container fluid="md">
@@ -146,7 +192,7 @@ export default function Meme(props: Props) {
                                             </ButtonGroup>
                                             <PassiveInfo
                                                 views={views}
-                                                comments={comments}
+                                                comments={incrementComments}
                                                 votes={votes}
                                                 fileformat={fileformat}
                                             />
@@ -175,7 +221,7 @@ export default function Meme(props: Props) {
                                                             <Accordion.Collapse eventKey="0">
                                                                 <Card.Body>
                                                                     <ListGroup>
-                                                                        {comments.map((comment, i) => {
+                                                                        {incrementComments.map((comment, i) => {
                                                                             return (
                                                                                 <ListGroup.Item
                                                                                     key={i}>
@@ -205,16 +251,14 @@ export default function Meme(props: Props) {
                                                                     onClick={() => {
                                                                         if (!likeActive) {
                                                                             handleLike();
-                                                                        } else {
                                                                         }
                                                                     }}>LOVE IT
-                                                                too!  {likes}</Button>
+                                                                too!  {incrementLikes}</Button>
                                                             <Button onClick={() => {
                                                                 if (!dislikeActive) {
-                                                                    handleDisike();
-                                                                } else {
+                                                                    handleDislike();
                                                                 }
-                                                            }}>DISLIKE it  {dislikes}</Button>
+                                                            }}>DISLIKE it  {incrementDislikes}</Button>
                                                         </Card>
                                                     </Accordion>
                                                 </ButtonGroup>
@@ -227,7 +271,10 @@ export default function Meme(props: Props) {
                                                         <FormControl
                                                             as="textarea"
                                                             aria-label="With textarea"
+                                                            value={comment}
+                                                            onChange={(e) => setComment(e.target.value)}
                                                         />
+                                                        <Button onClick={handleComment}>comment</Button>
                                                     </InputGroup>
                                                 </div>
                                             </Col>
