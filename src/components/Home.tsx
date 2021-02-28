@@ -39,7 +39,7 @@ export default function Home(props: RouteComponentProps) {
             <Link to="/register">register</Link><br />
             <Link to="/login">login</Link><br />
             <Link to="/about">about</Link><br />
-            <VoiceControlButton onSpeech={onSpeech} />
+            <VoiceControlButton onSpeech={onSpeech}  tooltipText={"available commands: login, register, about, slideshow, overview and create"}/>
         </div>
     )
 }
