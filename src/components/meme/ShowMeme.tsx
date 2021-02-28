@@ -10,8 +10,11 @@ interface RouteParams {
 interface State {
   imgUrl: string;
   imgName: string;
+  imgId: string;
   isLoading: boolean;
   imgViews: number;
+  imgLikes: number;
+  imgDislikes: number;
   imgFileformat: string;
   imgComments: string[];
   imgVotes: string[];
@@ -29,8 +32,11 @@ export default class ShowMeme extends React.Component<
     this.state = {
       imgUrl: "",
       imgName: "",
+      imgId: "",
       isLoading: true,
       imgViews: 0,
+      imgLikes: 0,
+      imgDislikes: 0,
       imgFileformat: "",
       imgComments: [],
       imgVotes: [],
@@ -41,7 +47,7 @@ export default class ShowMeme extends React.Component<
 
   async componentDidMount() {
     const id = this.props.match.params.id;
- console.log('id is'+id);
+
     const res = await fetch(apiEndpointUrl + "meme?id=" + id);
     const json = await res.json();
 
@@ -49,10 +55,13 @@ export default class ShowMeme extends React.Component<
       isLoading: false,
       imgUrl: json.data.meme.url,
       imgName: json.data.meme.name,
+      imgId: json.data.meme.id,
       imgViews: json.data.meme.views,
       imgFileformat: json.data.meme.fileformat,
       imgComments: json.data.meme.comments,
       imgVotes: json.data.meme.votes,
+      imgLikes: json.data.meme.likes,
+      imgDislikes: json.data.meme.dislikes,
       imgTags: json.data.meme.tags,
       imgCreatedAt: json.data.meme.createdAt,
     });
@@ -62,10 +71,13 @@ export default class ShowMeme extends React.Component<
     const meme = {
       url: this.state.imgUrl,
       name: this.state.imgName,
+      id: this.state.imgId,
       views: this.state.imgViews,
       fileformat: this.state.imgFileformat,
       comments: this.state.imgComments,
       votes: this.state.imgVotes,
+      likes: this.state.imgLikes,
+      dislikes: this.state.imgDislikes,
       tags: this.state.imgTags,
       createdAt: this.state.imgCreatedAt,
     };

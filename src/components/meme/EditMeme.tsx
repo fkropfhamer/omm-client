@@ -70,7 +70,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
                 }
             ],
             img: null,
-            imgUrl: '',
+            imgUrl: decodeURIComponent(this.props.match.params.url),
             canvasWidth: 500,
             canvasHeight: 500,
             imgWidth: 0,
@@ -139,7 +139,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
         const res = await fetch(apiEndpointUrl + 'meme', {
             method: 'POST',
             body: JSON.stringify({
-                url: decodeURIComponent(this.props.match.params.url),
+                url: this.state.imgUrl,
                 texts: this.state.texts,
                 name: this.state.name,
                 isPrivate: this.state.isPrivate,

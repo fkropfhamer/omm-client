@@ -1,10 +1,14 @@
 import DrawOnCanvas from "draw-on-canvas-react";
-import { Component } from "react";
+import React, { Component } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { apiEndpointUrl } from "../../constants";
+import SketchColorPicker from "../../js/SketchColorPicker";
 
+interface State {
+    strokeWeight: number
+}
 
-export default class DrawTemplate extends Component<RouteComponentProps> {
+export default class DrawTemplate extends Component<RouteComponentProps, State> {
     private ref: DrawOnCanvas | null
     private setRef: (instance: DrawOnCanvas | null) => void
 
@@ -16,6 +20,12 @@ export default class DrawTemplate extends Component<RouteComponentProps> {
         this.setRef = (instance: DrawOnCanvas | null) => {
             this.ref = instance;
         };
+
+        this.state = {
+            strokeWeight: 5
+        }
+
+        this.onColorChange = this.onColorChange.bind(this);
     }
 
     changeStrokeColor(color: string) {
@@ -50,17 +60,29 @@ export default class DrawTemplate extends Component<RouteComponentProps> {
         this.ref?.reset();
     }
 
+    private onColorChange(newHexColor: string) {
+        this.changeStrokeColor(newHexColor)
+    }
+
+    private onStrokeWeightChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        let value = parseInt(event.target.value)
+
+        if (value < 1) {
+            value = 1;
+        }
+
+        this.setState({strokeWeight: value})
+
+        this.changeStrokeWeight(value);
+    }
+
     render() {
         return (
             <div>
                 <h2>Draw template</h2>
-                <DrawOnCanvas width={500} height={500} strokeColor="black" strokeWeight={5} backgroundColor="grey" ref={this.setRef}/>
-                <button onClick={() => this.changeStrokeWeight(5)}>5</button>
-                <button onClick={() => this.changeStrokeWeight(10)}>10</button>
-                <button onClick={() => this.changeStrokeColor('black')}>black</button>
-                <button onClick={() => this.changeStrokeColor('green')}>green</button>
-                <button onClick={() => this.changeStrokeColor('blue')}>blue</button>
-                <button onClick={() => this.changeStrokeColor('red')}>red</button>
+                <DrawOnCanvas width={500} height={500} strokeColor="#F17013" strokeWeight={5} backgroundColor="grey" ref={this.setRef}/>
+                Strokeweight: <input type="number" onChange={this.onStrokeWeightChange} defaultValue={5} value={this.state.strokeWeight}/>
+                <SketchColorPicker onColorChange={this.onColorChange} />
                 <button onClick={() => this.reset()}>reset</button>
                 <button onClick={() => this.save()}>SAVE</button>
             </div>
