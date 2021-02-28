@@ -4,8 +4,11 @@ import { RouteComponentProps } from "react-router-dom";
 import { apiEndpointUrl } from "../../constants";
 import SketchColorPicker from "../../js/SketchColorPicker";
 
+interface State {
+    strokeWeight: number
+}
 
-export default class DrawTemplate extends Component<RouteComponentProps> {
+export default class DrawTemplate extends Component<RouteComponentProps, State> {
     private ref: DrawOnCanvas | null
     private setRef: (instance: DrawOnCanvas | null) => void
 
@@ -17,6 +20,10 @@ export default class DrawTemplate extends Component<RouteComponentProps> {
         this.setRef = (instance: DrawOnCanvas | null) => {
             this.ref = instance;
         };
+
+        this.state = {
+            strokeWeight: 5
+        }
 
         this.onColorChange = this.onColorChange.bind(this);
     }
@@ -58,16 +65,24 @@ export default class DrawTemplate extends Component<RouteComponentProps> {
     }
 
     private onStrokeWeightChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        this.changeStrokeWeight(parseInt(event.target.value));
+        let value = parseInt(event.target.value)
+
+        if (value < 1) {
+            value = 1;
+        }
+
+        this.setState({strokeWeight: value})
+
+        this.changeStrokeWeight(value);
     }
 
     render() {
         return (
             <div>
                 <h2>Draw template</h2>
-                <DrawOnCanvas width={500} height={500} strokeColor="black" strokeWeight={5} backgroundColor="grey" ref={this.setRef}/>
-                Strokeweight: <input type="number" onChange={this.onStrokeWeightChange} defaultValue={5}></input>
-                <SketchColorPicker onColorChange={this.onColorChange}></SketchColorPicker>
+                <DrawOnCanvas width={500} height={500} strokeColor="#F17013" strokeWeight={5} backgroundColor="grey" ref={this.setRef}/>
+                Strokeweight: <input type="number" onChange={this.onStrokeWeightChange} defaultValue={5} value={this.state.strokeWeight}/>
+                <SketchColorPicker onColorChange={this.onColorChange} />
                 <button onClick={() => this.reset()}>reset</button>
                 <button onClick={() => this.save()}>SAVE</button>
             </div>
