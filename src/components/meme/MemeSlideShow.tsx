@@ -124,7 +124,7 @@ export default function MemeSlideShow() {
                     </Row>
                 </div>
                 <Meme meme={currentMeme}/>
-                <VoiceControlButton onSpeech={onSpeech} />
+                <VoiceControlButton onSpeech={onSpeech}  tooltipText={"available commands: previous, next, random"}/>
                 <button onClick={onPrev}>pref</button>
                 <button onClick={onNext}>next</button>
                 <button onClick={onRandom}>random</button>

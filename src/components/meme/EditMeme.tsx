@@ -392,7 +392,7 @@ export default class EditMeme extends React.Component<RouteComponentProps<RouteP
                 </div>
                 <AddImageModal title={"Choose the positon of new Image relative to current Image"}
                         ref={this.addImageModal} addImageToMeme={(position,file) => this.addImageToMeme(position ,file)} />
-                <VoiceControlButton onSpeech={this.onSpeech} />
+                <VoiceControlButton onSpeech={this.onSpeech}  tooltipText={"available commands: add text, add image, remove text, create on server, create locally and download"}/>
             </div>
         )
     }
